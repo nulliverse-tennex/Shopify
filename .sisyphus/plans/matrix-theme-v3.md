@@ -249,7 +249,7 @@ Wave 6 (After All — Integration):
 
 ---
 
-- [ ] 2. Foundation Refactor — Cart Events, Money Format, Z-Index, Settings
+- [x] 2. Foundation Refactor — Cart Events, Money Format, Z-Index, Settings
 
   **What to do**:
   - **Cart event system**: Refactor `theme.js` CartManager to emit Custom Events after every cart operation:

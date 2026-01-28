@@ -70,9 +70,14 @@
 
   /* Z-index scale */
   --z-base: 1;
+  --z-back-to-top: 50;
   --z-dropdown: 100;
   --z-sticky: 200;
+  --z-sticky-cart: 300;
   --z-overlay: 500;
+  --z-quick-view: 800;
+  --z-cart-drawer: 900;
+  --z-popup: 950;
   --z-modal: 1000;
   --z-scanline: 9999;
 }

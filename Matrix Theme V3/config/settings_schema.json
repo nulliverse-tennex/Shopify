@@ -164,5 +164,240 @@
         "info": "96 x 96px .png recommended"
       }
     ]
+  },
+  {
+    "name": "Cart Features",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cart drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer",
+        "label": "Enable cart drawer",
+        "default": false,
+        "info": "Slide-out cart drawer instead of navigating to the cart page"
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "bubble", "label": "Floating bubble" }
+        ],
+        "default": "drawer",
+        "info": "Choose between a slide-out drawer or floating cart bubble"
+      },
+      {
+        "type": "header",
+        "content": "Cart enhancements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_order_notes",
+        "label": "Enable order notes",
+        "default": false,
+        "info": "Allow customers to add a note to their order"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_gift_wrapping",
+        "label": "Enable gift wrapping",
+        "default": false,
+        "info": "Offer gift wrapping option in the cart"
+      },
+      {
+        "type": "text",
+        "id": "gift_wrap_fee",
+        "label": "Gift wrap fee",
+        "default": "$5.00",
+        "info": "Display price for gift wrapping (display only)"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Navigation features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_header",
+        "label": "Enable sticky header",
+        "default": false,
+        "info": "Header stays visible when scrolling down"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_back_to_top",
+        "label": "Enable back-to-top button",
+        "default": false,
+        "info": "Show a scroll-to-top button after scrolling down"
+      }
+    ]
+  },
+  {
+    "name": "Product Highlights",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product page features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_stock_counter",
+        "label": "Enable stock counter",
+        "default": false,
+        "info": "Show low-stock warning when inventory is below threshold"
+      },
+      {
+        "type": "range",
+        "id": "stock_threshold",
+        "label": "Stock threshold",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 10,
+        "info": "Show low-stock warning when inventory is at or below this number"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_buy",
+        "label": "Enable quick buy",
+        "default": false,
+        "info": "Add quick add-to-cart buttons on product cards"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_view",
+        "label": "Enable quick view",
+        "default": false,
+        "info": "Allow viewing product details in a modal popup"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_recommended_products",
+        "label": "Enable recommended products",
+        "default": false,
+        "info": "Show product recommendations on product pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_recently_viewed",
+        "label": "Enable recently viewed",
+        "default": false,
+        "info": "Track and display recently viewed products"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_collection_filtering",
+        "label": "Enable collection filtering",
+        "default": false,
+        "info": "Show filter sidebar on collection pages"
+      }
+    ]
+  },
+  {
+    "name": "Marketing & Promotions",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Promotional features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_promo_banner",
+        "label": "Enable promo banner",
+        "default": false,
+        "info": "Show an announcement banner above the header"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_promo_popup",
+        "label": "Enable promo popup",
+        "default": false,
+        "info": "Show a promotional popup to visitors"
+      },
+      {
+        "type": "select",
+        "id": "popup_type",
+        "label": "Popup type",
+        "options": [
+          { "value": "email", "label": "Email capture" },
+          { "value": "announcement", "label": "Announcement" }
+        ],
+        "default": "email",
+        "info": "Choose between email signup or announcement popup"
+      },
+      {
+        "type": "range",
+        "id": "popup_delay",
+        "label": "Popup delay (seconds)",
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "default": 5,
+        "info": "Seconds before the popup appears"
+      },
+      {
+        "type": "text",
+        "id": "popup_heading",
+        "label": "Popup heading",
+        "default": ""
+      },
+      {
+        "type": "textarea",
+        "id": "popup_text",
+        "label": "Popup text",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "popup_button_text",
+        "label": "Popup button text",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "Countdown Timer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Countdown timer"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_countdown",
+        "label": "Enable countdown timer",
+        "default": false,
+        "info": "Show a countdown banner for promotions"
+      },
+      {
+        "type": "text",
+        "id": "countdown_end_date",
+        "label": "Countdown end date",
+        "default": "",
+        "info": "ISO 8601 format, e.g. 2026-03-01T00:00:00Z"
+      },
+      {
+        "type": "text",
+        "id": "countdown_label",
+        "label": "Countdown label",
+        "default": "",
+        "info": "Text to display before the countdown"
+      },
+      {
+        "type": "text",
+        "id": "countdown_expired_message",
+        "label": "Expired message",
+        "default": "",
+        "info": "Message shown when the countdown has ended"
+      }
+    ]
   }
 ]

@@ -108,25 +108,25 @@ class ProductForm extends HTMLElement {
   _updatePrice(variant) {
     if (!this.priceContainer) return;
 
-    var formatMoney = function (cents) {
-      return '$' + (cents / 100).toFixed(2);
-    };
+    var formatPrice = (typeof formatMoney === 'function')
+      ? formatMoney
+      : function (cents) { return (cents / 100).toFixed(2); };
 
     var html = '';
 
     if (variant.compare_at_price && variant.compare_at_price > variant.price) {
       html =
         '<span class="product-info__compare-price" data-compare-price>' +
-        formatMoney(variant.compare_at_price) +
+        formatPrice(variant.compare_at_price) +
         '</span>' +
         '<span class="product-info__sale-price" data-price>' +
-        formatMoney(variant.price) +
+        formatPrice(variant.price) +
         '</span>' +
         '<span class="badge badge--sale">Sale</span>';
     } else {
       html =
         '<span class="product-info__current-price" data-price>' +
-        formatMoney(variant.price) +
+        formatPrice(variant.price) +
         '</span>';
     }
 

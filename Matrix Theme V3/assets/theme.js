@@ -91,7 +91,58 @@ customElements.define('mobile-menu', MobileMenu);
 
 
 /* ============================================================
-   2. CART FUNCTIONALITY
+   2. MONEY FORMATTING
+   ============================================================ */
+
+/**
+ * Format cents into a money string using the shop's money_format.
+ * Reads window.Shopify.moneyFormat injected by theme.liquid.
+ * Supports {{amount}}, {{amount_no_decimals}}, {{amount_with_comma_separator}},
+ * {{amount_no_decimals_with_comma_separator}}, {{amount_with_apostrophe_separator}}.
+ */
+function formatMoney(cents) {
+  if (typeof cents === 'string') cents = cents.replace('.', '');
+  cents = parseInt(cents, 10) || 0;
+
+  var format = (window.Shopify && window.Shopify.moneyFormat) ? window.Shopify.moneyFormat : '${{amount}}';
+  var amount = (cents / 100).toFixed(2);
+  var amountNoDecimals = Math.round(cents / 100).toString();
+  var amountWithComma = amount.replace('.', ',');
+  var amountNoDecimalsWithComma = amountNoDecimals.replace(/(\d)(?=(\d{3})+$)/g, '$1.');
+  var amountWithApostrophe = amount.replace(/(\d)(?=(\d{3})+\.)/g, "$1'");
+
+  return format
+    .replace('{{amount_with_apostrophe_separator}}', amountWithApostrophe)
+    .replace('{{amount_no_decimals_with_comma_separator}}', amountNoDecimalsWithComma)
+    .replace('{{amount_with_comma_separator}}', amountWithComma)
+    .replace('{{amount_no_decimals}}', amountNoDecimals)
+    .replace('{{amount}}', amount);
+}
+
+
+/* ============================================================
+   3. SCROLL LOCK UTILITY
+   ============================================================ */
+
+var scrollLockCount = 0;
+
+function lockScroll() {
+  scrollLockCount++;
+  if (scrollLockCount === 1) {
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function unlockScroll() {
+  scrollLockCount = Math.max(0, scrollLockCount - 1);
+  if (scrollLockCount === 0) {
+    document.body.style.overflow = '';
+  }
+}
+
+
+/* ============================================================
+   4. CART FUNCTIONALITY
    ============================================================ */
 
 class CartManager {
@@ -172,6 +223,8 @@ class CartManager {
 
       this.updateCartCount(cart.item_count);
 
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
+
       await this.refreshCartSection();
 
     } catch (error) {
@@ -210,6 +263,10 @@ class CartManager {
     }
   }
 
+  addItemAdded(items) {
+    document.dispatchEvent(new CustomEvent('cart:item-added', { detail: { items: items } }));
+  }
+
   updateCartCount(count) {
     const badges = document.querySelectorAll('[data-cart-count]');
     badges.forEach((badge) => {
@@ -226,7 +283,7 @@ class CartManager {
 
 
 /* ============================================================
-   3. TYPEWRITER EFFECT
+   5. TYPEWRITER EFFECT
    ============================================================ */
 
 function initTypewriter() {
@@ -263,7 +320,7 @@ function initTypewriter() {
 
 
 /* ============================================================
-   4. INITIALIZATION
+   6. INITIALIZATION
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {

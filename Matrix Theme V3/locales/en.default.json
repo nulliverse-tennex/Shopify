@@ -44,7 +44,14 @@
     "vendor": "Vendor",
     "type": "Type",
     "sku": "SKU",
-    "variant": "Variant"
+    "variant": "Variant",
+    "stock_low": "Only {{ count }} left in stock",
+    "stock_in_stock": "In stock",
+    "stock_out": "Out of stock",
+    "quick_buy": "Quick add",
+    "quick_view": "Quick view",
+    "recommended_title": "You may also like",
+    "recently_viewed_title": "Recently viewed"
   },
   "collection": {
     "title": "Collections",
@@ -53,7 +60,9 @@
     "filter": "Filter",
     "clear_filters": "Clear all",
     "no_products": "No products found.",
-    "all": "All collections"
+    "all": "All collections",
+    "filter_title": "Filter by",
+    "no_results_filtered": "No products match your filters."
   },
   "cart": {
     "title": "Your cart",
@@ -66,7 +75,14 @@
     "quantity": "Quantity",
     "total": "Total",
     "note": "Order notes",
-    "taxes_and_shipping": "Taxes and shipping calculated at checkout"
+    "taxes_and_shipping": "Taxes and shipping calculated at checkout",
+    "drawer_title": "Your cart",
+    "order_note_label": "Order notes",
+    "order_note_placeholder": "Add a note to your order...",
+    "gift_wrap_label": "Add gift wrapping",
+    "gift_wrap_fee": "Gift wrap fee",
+    "gift_message_label": "Gift message",
+    "gift_message_placeholder": "Enter your gift message..."
   },
   "blog": {
     "title": "Blog",
@@ -212,5 +228,22 @@
       "shop_link": "Continue shopping",
       "print": "Print"
     }
+  },
+  "promo": {
+    "popup_close": "Close",
+    "banner_close": "Dismiss",
+    "subscribe": "Subscribe",
+    "email_placeholder": "Enter your email"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "expired": "This promotion has ended"
+  },
+  "navigation": {
+    "back_to_top": "Back to top",
+    "scroll_to_top": "Scroll to top"
   }
 }
