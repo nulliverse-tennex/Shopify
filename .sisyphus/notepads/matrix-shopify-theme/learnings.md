@@ -306,3 +306,41 @@ Downloaded Fira Code (weights 400, 500, 700) and VT323 (weight 400) in woff2 for
 
 ### Theme Check Result
 - 0 errors, 4 warnings (all pre-existing: RemoteAsset for QR, UndefinedObject for reset_password email, AssetPreload suggestions)
+
+## Task 9: Matrix Rain + Typing Animation — Completed
+
+### Files Created/Updated
+- `assets/matrix-rain.js` (3,122 bytes) — Canvas digital rain, self-contained IIFE
+- `assets/theme.js` — Added `initTypewriter()` function (section 3) + call in DOMContentLoaded
+- `assets/theme.css` — Added `.typewriter`, `.typewriter--typing`, `.typewriter--done`, `@keyframes blink-caret` (section 11a)
+- `layout/theme.liquid` — Added `<script defer>` for matrix-rain.js, body classes from settings
+
+### Key Patterns
+
+1. **Canvas Rain IIFE Pattern**
+   - Self-contained IIFE creates own canvas, appends to body
+   - `rgba(0,0,0,0.05)` fillRect for trail effect — semi-transparent black overlay each frame
+   - Column array with random reset when character passes bottom (`Math.random() > 0.975`)
+   - Max 60 columns for performance cap
+   - Canvas positioned `fixed`, `z-index: -1`, `pointer-events: none`
+
+2. **Triple Disable Check**
+   - `canRun()` checks: body.rain-enabled class + viewport >= 768px + !prefers-reduced-motion
+   - Resize listener calls `check()` which starts/stops based on conditions
+   - matchMedia `change` event listener for prefers-reduced-motion toggle
+
+3. **Typewriter JS + CSS Split**
+   - JS handles character-by-character text reveal via `setTimeout` (~80ms per char)
+   - CSS handles cursor blink via `border-right: 2px solid` + `@keyframes blink-caret` with `step-end`
+   - Class toggle: `typewriter--typing` (active cursor blink) → `typewriter--done` (cursor hidden)
+   - Reduced motion: show full text immediately, skip animation
+
+4. **Body Class Conditional Pattern**
+   - `{% if settings.enable_matrix_rain %}rain-enabled {% endif %}` in body tag
+   - Settings schema already had `enable_matrix_rain`, `enable_scanlines`, `enable_typing_animation` checkboxes
+   - Rain JS checks class presence; scanlines CSS already used `body.scanlines-enabled::after`
+
+### Performance Notes
+- matrix-rain.js: 3,122 bytes (well under 5KB budget)
+- Canvas uses requestAnimationFrame (not setInterval) — battery friendly
+- Deferred script loading — no render blocking

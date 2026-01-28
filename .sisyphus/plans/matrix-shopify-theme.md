@@ -1030,7 +1030,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 9. Matrix Effects — Rain Canvas + Typing Animation
+- [x] 9. Matrix Effects — Rain Canvas + Typing Animation
 
   **What to do**:
   - Create `assets/matrix-rain.js`:

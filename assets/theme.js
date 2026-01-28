@@ -226,9 +226,47 @@ class CartManager {
 
 
 /* ============================================================
-   3. INITIALIZATION
+   3. TYPEWRITER EFFECT
+   ============================================================ */
+
+function initTypewriter() {
+  var el = document.querySelector('.typewriter');
+  if (!el) return;
+
+  var text = el.getAttribute('data-text');
+  if (!text) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = text;
+    el.classList.add('typewriter--done');
+    return;
+  }
+
+  el.textContent = '';
+  el.classList.add('typewriter--typing');
+  var i = 0;
+  var delay = 80;
+
+  function type() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, delay);
+    } else {
+      el.classList.remove('typewriter--typing');
+      el.classList.add('typewriter--done');
+    }
+  }
+
+  type();
+}
+
+
+/* ============================================================
+   4. INITIALIZATION
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
   window.cartManager = new CartManager();
+  initTypewriter();
 });
