@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}" style="background-color: #000">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'gift_cards.issued.title' | t }} — {{ shop.name }}</title>
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+    {{ content_for_header }}
+  </head>
+  <body>
+    <div class="gift-card" data-template="gift-card">
+      <h1>{{ shop.name }}</h1>
+      <h2>{{ 'gift_cards.issued.subtext' | t }}</h2>
+
+      {%- unless gift_card.enabled -%}
+        <p class="gift-card__disabled">{{ 'gift_cards.issued.disabled' | t }}</p>
+      {%- endunless -%}
+
+      {%- if gift_card.expired -%}
+        <p class="gift-card__expired">{{ 'gift_cards.issued.expired' | t }}</p>
+      {%- endif -%}
+
+      {%- if gift_card.expires_on -%}
+        <p class="gift-card__expiry">
+          {{ 'gift_cards.issued.expiration_date' | t }}: {{ gift_card.expires_on | date: format: 'abbreviated_date' }}
+        </p>
+      {%- endif -%}
+
+      <div class="gift-card__image">
+        {%- if gift_card.image -%}
+          <img
+            src="{{ gift_card.image | image_url: width: 570 }}"
+            alt=""
+            width="570"
+            height="{{ 570 | divided_by: gift_card.image.aspect_ratio | ceil }}"
+            loading="eager"
+          >
+        {%- endif -%}
+      </div>
+
+      <p class="gift-card__balance">{{ gift_card.balance | money }}</p>
+
+      <div class="gift-card__code">
+        <input
+          type="text"
+          id="gift-card-code"
+          class="gift-card__code-input"
+          value="{{ gift_card.code | format_code }}"
+          aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+          readonly
+        >
+      </div>
+
+      <div class="gift-card__qr" data-identifier="{{ gift_card.qr_identifier }}">
+        <img
+          src="{{ gift_card.qr_identifier | prepend: 'https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=' }}"
+          alt="{{ 'gift_cards.issued.qr_image_alt' | t }}"
+          width="120"
+          height="120"
+        >
+      </div>
+
+      {%- if gift_card.pass_url -%}
+        <a href="{{ gift_card.pass_url }}" class="gift-card__apple-wallet">
+          <img
+            src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+            alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
+            width="120"
+            height="40"
+            loading="lazy"
+          >
+        </a>
+      {%- endif -%}
+
+      <div class="gift-card__actions">
+        <a href="{{ shop.url }}" class="gift-card__shop-link" target="_blank" rel="noopener">
+          {{ 'gift_cards.issued.shop_link' | t }}
+        </a>
+
+        <button class="gift-card__print" onclick="window.print();">
+          {{ 'gift_cards.issued.print' | t }}
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

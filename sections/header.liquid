@@ -1,0 +1,20 @@
+<header class="site-header" role="banner">
+  <nav class="site-nav" role="navigation" aria-label="{{ 'accessibility.menu' | t }}">
+    <a href="{{ routes.root_url }}" class="site-header__logo">
+      {{ shop.name }}
+    </a>
+
+    <a href="{{ routes.cart_url }}" class="site-header__cart">
+      {{ 'header.cart' | t }}
+      <span class="cart-count">({{ cart.item_count }})</span>
+    </a>
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": []
+}
+{% endschema %}

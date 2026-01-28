@@ -1,0 +1,34 @@
+{
+  "current": {
+    "color_accent": "#00ff41",
+    "color_accent_secondary": "#008f11",
+    "color_background": "#000000",
+    "color_panel": "#0a0a0a",
+    "color_text": "#00ff41",
+    "color_text_muted": "#00802b",
+    "color_border": "#003b00",
+    "font_heading_scale": 100,
+    "font_body_scale": 100,
+    "enable_scanlines": true,
+    "enable_matrix_rain": false,
+    "enable_typing_animation": true,
+    "enable_glow": true,
+    "enable_flicker": false
+  },
+  "presets": {
+    "Matrix Default": {
+      "color_accent": "#00ff41",
+      "color_accent_secondary": "#008f11",
+      "color_background": "#000000",
+      "color_panel": "#0a0a0a",
+      "color_text": "#00ff41",
+      "color_text_muted": "#00802b",
+      "color_border": "#003b00",
+      "enable_scanlines": true,
+      "enable_matrix_rain": false,
+      "enable_typing_animation": true,
+      "enable_glow": true,
+      "enable_flicker": false
+    }
+  }
+}

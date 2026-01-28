@@ -1,0 +1,15 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+    <p class="site-footer__copyright">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+    </p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": []
+}
+{% endschema %}

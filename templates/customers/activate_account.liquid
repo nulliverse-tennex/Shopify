@@ -1,0 +1,23 @@
+<div class="customer-activate" data-template="activate-account">
+  <h1>{{ 'customer.activate_account.title' | t }}</h1>
+  <p>{{ 'customer.activate_account.subtext' | t }}</p>
+
+  {%- form 'activate_customer_password' -%}
+    {{ form.errors | default_errors }}
+
+    <div class="field">
+      <label for="activate-password">{{ 'customer.activate_account.password' | t }}</label>
+      <input type="password" id="activate-password" name="customer[password]" autocomplete="new-password" required>
+    </div>
+
+    <div class="field">
+      <label for="activate-password-confirm">{{ 'customer.activate_account.password_confirm' | t }}</label>
+      <input type="password" id="activate-password-confirm" name="customer[password_confirmation]" autocomplete="new-password" required>
+    </div>
+
+    <div class="actions">
+      <button type="submit">{{ 'customer.activate_account.submit' | t }}</button>
+      <a href="{{ routes.account_login_url }}">{{ 'customer.activate_account.cancel' | t }}</a>
+    </div>
+  {%- endform -%}
+</div>
