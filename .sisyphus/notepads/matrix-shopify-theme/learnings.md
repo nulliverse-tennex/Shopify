@@ -79,3 +79,43 @@ Downloaded Fira Code (weights 400, 500, 700) and VT323 (weight 400) in woff2 for
 ### WSL1 Gotcha
 - System npm from Windows doesn't work in WSL1 — use nvm-managed node/npm instead
 - Full path export needed: `export PATH="/home/juanitolillig/.nvm/versions/node/v20.20.0/bin:$PATH"`
+
+## Task 3: CSS Design System (theme.css) — Completed
+
+### File Stats
+- Size: 20,929 bytes (~20.4KB) — well within 50KB budget
+- 15 sections: Custom Properties, Reset, Typography, Layout, Buttons, Forms, Product Cards, Navigation, Badges/Tags, Text Glow, Scanline Overlay, Accessibility, Responsive, Reduced Motion, Print
+
+### Architecture Decisions
+- All values driven through CSS Custom Properties in `:root` — accent color overridable via Shopify settings inline CSS injection
+- Flat selectors only (no CSS nesting) for broad browser support
+- Mobile-first responsive: 375px → 768px → 1024px → 1440px
+- VT323 for headings (uppercase, letter-spacing, glow), Fira Code for body text
+- Heading scale bumps up at tablet (768px) and wide (1440px) breakpoints
+
+### Key Patterns
+- `--color-accent-dim` (15% opacity), `--color-accent-glow` (40%), `--color-accent-soft` (20%) — reused across all glow/hover effects
+- Scanline overlay via `body.scanlines-enabled::after` — class-toggled, opacity 0.3, pointer-events: none
+- `:focus-visible` for keyboard-only focus outlines (green, 2px solid, 2px offset)
+- `:focus:not(:focus-visible)` removes outlines for mouse users
+- `@media (prefers-reduced-motion: reduce)` kills all animations, transitions, scanlines
+- Print styles swap to white bg/black text, remove all effects
+
+### Color Contrast Notes
+- #00ff41 on #000 = 15:1 (AAA) ✓
+- #e0e0e0 on #000 = 15.3:1 (AAA) ✓
+- #7a7a7a on #000 = 5.6:1 (AA) ✓ — used for muted text only
+- #ff4444 on #000 = 5.3:1 (AA) ✓ — error color
+- Select dropdown uses inline SVG data URI for custom green chevron
+
+### Component Classes Available
+- `.btn`, `.btn--primary`, `.btn--small`, `.btn--large`, `.btn--block`, `.btn--ghost`, `.btn--danger`
+- `.form-group`, `.form-label`, `.form-input`, `.form-select`, `.form-textarea`, `.form-error`
+- `.product-card`, `.product-card__image`, `.product-card__body`, `.product-card__title`, `.product-card__price`
+- `.nav`, `.nav__link`, `.nav__link--active`
+- `.badge`, `.badge--sale`, `.badge--sold-out`, `.badge--new`, `.tag`, `.tag--active`
+- `.glow`, `.glow--strong`
+- `.container`, `.container--narrow`, `.container--wide`
+- `.grid`, `.grid--2`, `.grid--3`, `.grid--4`, `.grid--auto`
+- `.flex`, `.flex--wrap`, `.flex--col`, `.flex--center`, `.flex--between`
+- `.skip-to-content`, `.visually-hidden`

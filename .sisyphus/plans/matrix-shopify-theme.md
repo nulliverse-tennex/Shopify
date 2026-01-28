@@ -425,7 +425,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 3. Core CSS Design System — theme.css
+- [x] 3. Core CSS Design System — theme.css
 
   **What to do**:
   - Build `assets/theme.css` as the single stylesheet for the entire theme
