@@ -344,3 +344,45 @@ Downloaded Fira Code (weights 400, 500, 700) and VT323 (weight 400) in woff2 for
 - matrix-rain.js: 3,122 bytes (well under 5KB budget)
 - Canvas uses requestAnimationFrame (not setInterval) — battery friendly
 - Deferred script loading — no render blocking
+
+## Task 10: Customer Templates + Apps Section + Final Verification — Completed
+
+### Files Created/Updated
+- `templates/customers/login.liquid` (120 lines) — Dark panel form, email/password, forgot password link, create account link
+- `templates/customers/register.liquid` (127 lines) — Dark panel form, first/last name, email, password, back to login
+- `templates/customers/account.liquid` (192 lines) — Order history table with hover states, empty state, account details card
+- `templates/customers/addresses.liquid` (191 lines) — Two-column layout (desktop), add address form with grid fields, existing address cards
+- `templates/customers/order.liquid` (262 lines) — Order details table with grand total highlight, fulfillment tracking, billing/shipping addresses
+- `templates/customers/activate_account.liquid` (91 lines) — Password set form, decline invitation link
+- `templates/customers/reset_password.liquid` (100 lines) — New password + confirm form, back to login link
+- `sections/apps.liquid` (14 lines) — Required app block section with `@app` block type
+
+### Styling Pattern for Customer Templates
+- All form-based templates (login, register, activate, reset) use `customer-form-panel` class — centered 480px max-width dark panel
+- Account/order/addresses use full-width container with table and card patterns
+- Reused design system classes: `.form-group`, `.form-label`, `.form-input`, `.form-select`, `.btn`, `.btn--primary`, `.btn--block`, `.badge`, `.glow`, `.container--narrow`
+- Section-scoped `<style>` blocks for component-specific styles — avoids polluting theme.css
+- Dark panel: `background: var(--color-panel); border: 1px solid var(--color-border)`
+- Tables: green accent header border, accent-dim hover on rows, heading font for order links
+- Terminal-style prompts as form subtext (e.g., `> access_terminal_`, `> new_user --register_`)
+
+### Empty States Verified
+- Cart: `{% if cart.item_count == 0 %}` → "CART EMPTY" + continue shopping
+- Collection: `{% if collection.products.size > 0 %}` else → "NO PRODUCTS FOUND_" + BROWSE ALL
+- Search: `{% if search.results_count > 0 %}` else → terminal NO RESULTS FOUND block
+- 404: ASCII art + "> ERROR 404: PAGE NOT FOUND_" + RETURN_HOME button
+
+### Final Verification Results
+- JSON templates: 12 (≥12 ✓)
+- Customer templates: 7 (≥7 ✓)
+- Sections: 16 (≥15 ✓) — includes apps.liquid
+- All customer templates > 10 lines (min 91, max 262) ✓
+- theme.css: 21,526 bytes (< 50KB) ✓
+- theme.js: 7,837 bytes (< 30KB) ✓
+- matrix-rain.js: 3,122 bytes (< 5KB) ✓
+- product.js: 6,132 bytes (< 15KB) ✓
+- No `{% include %}` tags: 0 found ✓
+- All JSON template section references resolve: PASS ✓
+- All locale keys in customer templates exist: PASS ✓
+- settings_data.json + settings_schema.json: valid JSON ✓
+- apps.liquid: has `@app` block type + `{% render block %}` ✓

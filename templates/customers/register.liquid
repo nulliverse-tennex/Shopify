@@ -1,31 +1,127 @@
 <div class="customer-register" data-template="register">
-  <h1>{{ 'customer.register.title' | t }}</h1>
+  <div class="container container--narrow pt-3xl pb-3xl">
+    <div class="customer-form-panel">
+      <div class="customer-form-header text-center mb-xl">
+        <h1 class="glow">{{ 'customer.register.title' | t }}</h1>
+        <p class="customer-form-subtext mt-sm">> new_user --register_</p>
+      </div>
 
-  {%- form 'create_customer' -%}
-    {{ form.errors | default_errors }}
+      {%- form 'create_customer' -%}
+        {{ form.errors | default_errors }}
 
-    <div class="field">
-      <label for="register-first-name">{{ 'customer.register.first_name' | t }}</label>
-      <input type="text" id="register-first-name" name="customer[first_name]" autocomplete="given-name">
+        <div class="form-group">
+          <label class="form-label" for="register-first-name">{{ 'customer.register.first_name' | t }}</label>
+          <input
+            type="text"
+            id="register-first-name"
+            class="form-input"
+            name="customer[first_name]"
+            autocomplete="given-name"
+            placeholder="First name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-last-name">{{ 'customer.register.last_name' | t }}</label>
+          <input
+            type="text"
+            id="register-last-name"
+            class="form-input"
+            name="customer[last_name]"
+            autocomplete="family-name"
+            placeholder="Last name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-email">{{ 'customer.register.email' | t }}</label>
+          <input
+            type="email"
+            id="register-email"
+            class="form-input"
+            name="customer[email]"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="user@domain.com"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-password">{{ 'customer.register.password' | t }}</label>
+          <input
+            type="password"
+            id="register-password"
+            class="form-input"
+            name="customer[password]"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            required
+          >
+        </div>
+
+        <div class="customer-form-actions mt-lg">
+          <button type="submit" class="btn btn--primary btn--block">
+            {{ 'customer.register.submit' | t }}
+          </button>
+        </div>
+      {%- endform -%}
+
+      <div class="customer-form-footer mt-xl text-center">
+        <p class="customer-form-alt">
+          Already have an account?
+          <a href="{{ routes.account_login_url }}">Sign in</a>
+        </p>
+      </div>
     </div>
-
-    <div class="field">
-      <label for="register-last-name">{{ 'customer.register.last_name' | t }}</label>
-      <input type="text" id="register-last-name" name="customer[last_name]" autocomplete="family-name">
-    </div>
-
-    <div class="field">
-      <label for="register-email">{{ 'customer.register.email' | t }}</label>
-      <input type="email" id="register-email" name="customer[email]" autocomplete="email" autocorrect="off" autocapitalize="off" required>
-    </div>
-
-    <div class="field">
-      <label for="register-password">{{ 'customer.register.password' | t }}</label>
-      <input type="password" id="register-password" name="customer[password]" autocomplete="new-password" required>
-    </div>
-
-    <div class="actions">
-      <button type="submit">{{ 'customer.register.submit' | t }}</button>
-    </div>
-  {%- endform -%}
+  </div>
 </div>
+
+<style>
+  .customer-form-panel {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-2xl);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .customer-form-header h1 {
+    font-size: var(--h2);
+  }
+
+  .customer-form-subtext {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .customer-form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .customer-form-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-lg);
+  }
+
+  .customer-form-alt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .customer-form-alt a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .customer-form-alt a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+</style>

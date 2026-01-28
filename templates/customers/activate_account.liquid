@@ -1,23 +1,91 @@
 <div class="customer-activate" data-template="activate-account">
-  <h1>{{ 'customer.activate_account.title' | t }}</h1>
-  <p>{{ 'customer.activate_account.subtext' | t }}</p>
+  <div class="container container--narrow pt-3xl pb-3xl">
+    <div class="customer-form-panel">
+      <div class="customer-form-header text-center mb-xl">
+        <h1 class="glow">{{ 'customer.activate_account.title' | t }}</h1>
+        <p class="customer-form-subtext mt-sm">{{ 'customer.activate_account.subtext' | t }}</p>
+      </div>
 
-  {%- form 'activate_customer_password' -%}
-    {{ form.errors | default_errors }}
+      {%- form 'activate_customer_password' -%}
+        {{ form.errors | default_errors }}
 
-    <div class="field">
-      <label for="activate-password">{{ 'customer.activate_account.password' | t }}</label>
-      <input type="password" id="activate-password" name="customer[password]" autocomplete="new-password" required>
+        <div class="form-group">
+          <label class="form-label" for="activate-password">{{ 'customer.activate_account.password' | t }}</label>
+          <input
+            type="password"
+            id="activate-password"
+            class="form-input"
+            name="customer[password]"
+            autocomplete="new-password"
+            placeholder="Enter password"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="activate-password-confirm">{{ 'customer.activate_account.password_confirm' | t }}</label>
+          <input
+            type="password"
+            id="activate-password-confirm"
+            class="form-input"
+            name="customer[password_confirmation]"
+            autocomplete="new-password"
+            placeholder="Confirm password"
+            required
+          >
+        </div>
+
+        <div class="customer-form-actions mt-lg">
+          <button type="submit" class="btn btn--primary btn--block">
+            {{ 'customer.activate_account.submit' | t }}
+          </button>
+          <a href="{{ routes.account_login_url }}" class="customer-form-link mt-md">
+            {{ 'customer.activate_account.cancel' | t }}
+          </a>
+        </div>
+      {%- endform -%}
     </div>
-
-    <div class="field">
-      <label for="activate-password-confirm">{{ 'customer.activate_account.password_confirm' | t }}</label>
-      <input type="password" id="activate-password-confirm" name="customer[password_confirmation]" autocomplete="new-password" required>
-    </div>
-
-    <div class="actions">
-      <button type="submit">{{ 'customer.activate_account.submit' | t }}</button>
-      <a href="{{ routes.account_login_url }}">{{ 'customer.activate_account.cancel' | t }}</a>
-    </div>
-  {%- endform -%}
+  </div>
 </div>
+
+<style>
+  .customer-form-panel {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-2xl);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .customer-form-header h1 {
+    font-size: var(--h2);
+  }
+
+  .customer-form-subtext {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .customer-form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .customer-form-link {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: text-shadow var(--transition-fast);
+    display: inline-block;
+  }
+
+  .customer-form-link:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+</style>

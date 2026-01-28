@@ -1,75 +1,262 @@
 <div class="customer-order" data-template="order">
-  <h1>{{ 'customer.order.title' | t: name: order.name }}</h1>
+  <div class="container pt-2xl pb-3xl">
+    <div class="customer-order-header mb-xl">
+      <a href="{{ routes.account_url }}" class="customer-back-link mb-md">&lt; Back to account</a>
+      <h1 class="glow">{{ 'customer.order.title' | t: name: order.name }}</h1>
+      <p class="customer-order-date mt-xs">
+        {{ 'customer.order.date' | t }}: {{ order.created_at | date: format: 'abbreviated_date' }}
+      </p>
 
-  <p>{{ 'customer.order.date' | t }}: {{ order.created_at | date: format: 'abbreviated_date' }}</p>
+      {%- if order.cancelled -%}
+        <div class="customer-order-cancelled mt-md">
+          <span class="badge badge--sale">Cancelled</span>
+          <p class="mt-xs">
+            {{ 'customer.order.cancelled_on' | t }}: {{ order.cancelled_at | date: format: 'abbreviated_date' }}
+          </p>
+          <p>{{ 'customer.order.cancelled_reason' | t }}: {{ order.cancel_reason_label }}</p>
+        </div>
+      {%- endif -%}
+    </div>
 
-  {%- if order.cancelled -%}
-    <p>{{ 'customer.order.cancelled_on' | t }}: {{ order.cancelled_at | date: format: 'abbreviated_date' }}</p>
-    <p>{{ 'customer.order.cancelled_reason' | t }}: {{ order.cancel_reason_label }}</p>
-  {%- endif -%}
+    <div class="customer-order-items mb-2xl">
+      <div class="customer-table-wrap">
+        <table class="customer-table">
+          <thead>
+            <tr>
+              <th>{{ 'customer.order.product' | t }}</th>
+              <th>{{ 'customer.order.sku' | t }}</th>
+              <th class="text-right">{{ 'customer.order.price' | t }}</th>
+              <th class="text-center">{{ 'customer.order.quantity' | t }}</th>
+              <th class="text-right">{{ 'customer.order.total' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for line_item in order.line_items -%}
+              <tr>
+                <td>
+                  <div class="customer-order-product">
+                    {{ line_item.title | link_to: line_item.product.url }}
+                    {%- if line_item.fulfillment -%}
+                      <p class="customer-order-fulfillment mt-xs">
+                        {{ 'customer.order.fulfilled_on' | t }}: {{ line_item.fulfillment.created_at | date: format: 'abbreviated_date' }}
+                        {%- if line_item.fulfillment.tracking_url -%}
+                          — <a href="{{ line_item.fulfillment.tracking_url }}" class="customer-tracking-link">{{ line_item.fulfillment.tracking_number }}</a>
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                </td>
+                <td class="customer-order-sku">{{ line_item.sku }}</td>
+                <td class="text-right">{{ line_item.final_price | money }}</td>
+                <td class="text-center">{{ line_item.quantity }}</td>
+                <td class="text-right customer-order-line-total">{{ line_item.final_line_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="text-right">{{ 'customer.order.subtotal' | t }}</td>
+              <td class="text-right">{{ order.line_items_subtotal_price | money }}</td>
+            </tr>
+            {%- for discount_application in order.discount_applications -%}
+              <tr class="customer-order-discount">
+                <td colspan="4" class="text-right">{{ 'customer.order.discount' | t }}: {{ discount_application.title }}</td>
+                <td class="text-right">-{{ discount_application.total_allocated_amount | money }}</td>
+              </tr>
+            {%- endfor -%}
+            {%- for shipping_method in order.shipping_methods -%}
+              <tr>
+                <td colspan="4" class="text-right">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td>
+                <td class="text-right">{{ shipping_method.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            {%- for tax_line in order.tax_lines -%}
+              <tr>
+                <td colspan="4" class="text-right">{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</td>
+                <td class="text-right">{{ tax_line.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            <tr class="customer-order-grand-total">
+              <td colspan="4" class="text-right"><strong>{{ 'customer.order.total' | t }}</strong></td>
+              <td class="text-right"><strong>{{ order.total_net_amount | money }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>{{ 'customer.order.product' | t }}</th>
-        <th>{{ 'customer.order.sku' | t }}</th>
-        <th>{{ 'customer.order.price' | t }}</th>
-        <th>{{ 'customer.order.quantity' | t }}</th>
-        <th>{{ 'customer.order.total' | t }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {%- for line_item in order.line_items -%}
-        <tr>
-          <td>
-            {{ line_item.title | link_to: line_item.product.url }}
-            {%- if line_item.fulfillment -%}
-              <p>{{ 'customer.order.fulfilled_on' | t }}: {{ line_item.fulfillment.created_at | date: format: 'abbreviated_date' }}</p>
-              {%- if line_item.fulfillment.tracking_url -%}
-                <a href="{{ line_item.fulfillment.tracking_url }}">{{ line_item.fulfillment.tracking_number }}</a>
-              {%- endif -%}
-            {%- endif -%}
-          </td>
-          <td>{{ line_item.sku }}</td>
-          <td>{{ line_item.final_price | money }}</td>
-          <td>{{ line_item.quantity }}</td>
-          <td>{{ line_item.final_line_price | money }}</td>
-        </tr>
-      {%- endfor -%}
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="4">{{ 'customer.order.subtotal' | t }}</td>
-        <td>{{ order.line_items_subtotal_price | money }}</td>
-      </tr>
-      {%- for discount_application in order.discount_applications -%}
-        <tr>
-          <td colspan="4">{{ 'customer.order.discount' | t }}: {{ discount_application.title }}</td>
-          <td>-{{ discount_application.total_allocated_amount | money }}</td>
-        </tr>
-      {%- endfor -%}
-      {%- for shipping_method in order.shipping_methods -%}
-        <tr>
-          <td colspan="4">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td>
-          <td>{{ shipping_method.price | money }}</td>
-        </tr>
-      {%- endfor -%}
-      {%- for tax_line in order.tax_lines -%}
-        <tr>
-          <td colspan="4">{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</td>
-          <td>{{ tax_line.price | money }}</td>
-        </tr>
-      {%- endfor -%}
-      <tr>
-        <td colspan="4"><strong>{{ 'customer.order.total' | t }}</strong></td>
-        <td><strong>{{ order.total_net_amount | money }}</strong></td>
-      </tr>
-    </tfoot>
-  </table>
+    <div class="grid grid--2">
+      <div class="customer-address-block">
+        <h2 class="customer-section-title mb-md">{{ 'customer.order.billing_address' | t }}</h2>
+        <div class="customer-address-card">
+          {{ order.billing_address | format_address }}
+        </div>
+      </div>
 
-  <h2>{{ 'customer.order.billing_address' | t }}</h2>
-  <p>{{ order.billing_address | format_address }}</p>
-
-  <h2>{{ 'customer.order.shipping_address' | t }}</h2>
-  <p>{{ order.shipping_address | format_address }}</p>
+      <div class="customer-address-block">
+        <h2 class="customer-section-title mb-md">{{ 'customer.order.shipping_address' | t }}</h2>
+        <div class="customer-address-card">
+          {{ order.shipping_address | format_address }}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+  .customer-order-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .customer-back-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .customer-back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .customer-order-date {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .customer-order-cancelled {
+    background: rgba(255, 68, 68, 0.08);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+  }
+
+  .customer-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .customer-table th {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-accent);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .customer-table td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+    vertical-align: middle;
+  }
+
+  .customer-table tbody tr {
+    transition: background var(--transition-fast);
+  }
+
+  .customer-table tbody tr:hover {
+    background: var(--color-accent-dim);
+  }
+
+  .customer-table tfoot td {
+    padding: var(--space-xs) var(--space-md);
+    border-bottom: none;
+    color: var(--color-text-muted);
+  }
+
+  .customer-order-grand-total td {
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+  }
+
+  .customer-order-product a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    letter-spacing: 0.04em;
+  }
+
+  .customer-order-product a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+
+  .customer-order-fulfillment {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .customer-tracking-link {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .customer-tracking-link:hover {
+    text-decoration: underline;
+  }
+
+  .customer-order-sku {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .customer-order-line-total {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+  }
+
+  .customer-order-discount td {
+    color: var(--color-success);
+  }
+
+  .customer-section-title {
+    font-size: var(--h4);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .customer-address-card {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  .customer-address-block {
+    margin-bottom: var(--space-lg);
+  }
+
+  @media (max-width: 767px) {
+    .customer-table {
+      font-size: var(--font-size-xs);
+    }
+
+    .customer-table th,
+    .customer-table td {
+      padding: var(--space-xs) var(--space-sm);
+    }
+  }
+</style>

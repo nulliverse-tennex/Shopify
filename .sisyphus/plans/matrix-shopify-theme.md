@@ -1138,7 +1138,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 10. Customer Templates + Empty States + Final QA
+- [x] 10. Customer Templates + Empty States + Final QA
 
   **What to do**:
   - Style all 7 customer templates with dark theme + green accents:
