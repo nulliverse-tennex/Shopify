@@ -76,13 +76,13 @@ Deliver a production-ready Shopify Online Store 2.0 theme with a cohesive Matrix
 - Self-hosted font files (Fira Code, VT323)
 
 ### Definition of Done
-- [ ] `shopify theme check --fail-level error` → 0 errors
-- [ ] All pages render without console JS errors
-- [ ] Lighthouse accessibility score >= 90 on all page types
-- [ ] Responsive at 375px and 1440px — no overflow, no broken layouts
-- [ ] `prefers-reduced-motion: reduce` disables all animations
-- [ ] Full cart flow works: add to cart → view cart → change qty → remove → empty state
-- [ ] All empty states render (empty cart, empty collection, no search results, 404)
+- [~] `shopify theme check --fail-level error` → 0 errors *(Cannot verify: Shopify CLI unavailable on WSL 1)*
+- [~] All pages render without console JS errors *(Cannot verify: Requires dev store + browser)*
+- [~] Lighthouse accessibility score >= 90 on all page types *(Cannot verify: Requires dev store + Playwright)*
+- [~] Responsive at 375px and 1440px — no overflow, no broken layouts *(Cannot verify: Requires dev store + browser)*
+- [x] `prefers-reduced-motion: reduce` disables all animations *(Verified: 5 checks in CSS/JS)*
+- [~] Full cart flow works: add to cart → view cart → change qty → remove → empty state *(Cannot verify: Requires dev store)*
+- [x] All empty states render (empty cart, empty collection, no search results, 404) *(Verified: All templates have empty state conditionals)*
 
 ### Must Have
 - Online Store 2.0 architecture (JSON templates, sections with schemas)
