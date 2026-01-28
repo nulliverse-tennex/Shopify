@@ -1,4 +1,28 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Welcome to the Matrix",
+        "subtext": "You take the red pill, you stay in Wonderland, and I show you how deep the rabbit hole goes.",
+        "button_text": "Enter the Matrix",
+        "enable_typing": true
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Products",
+        "products_count": 4
+      }
+    },
+    "about": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "About Us",
+        "text_alignment": "center"
+      }
+    }
+  },
+  "order": ["hero", "featured", "about"]
 }

@@ -189,6 +189,16 @@
     "pagination": "Pagination",
     "slider": "Slider"
   },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thanks for contacting us. We'll get back to you as soon as possible.",
+      "title": "Contact"
+    }
+  },
   "gift_cards": {
     "issued": {
       "title": "Gift card",

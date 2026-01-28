@@ -1,0 +1,48 @@
+{%- comment -%}
+  Product card snippet
+  Accepts: product (Shopify product object)
+  Usage: {% render 'product-card', product: product %}
+{%- endcomment -%}
+
+{%- if product and product != empty -%}
+  <div class="product-card">
+    <a href="{{ product.url }}" class="product-card__image" aria-label="{{ product.title | escape }}">
+      {%- if product.featured_image -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="600"
+          height="600"
+          loading="lazy"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+      {%- endif -%}
+
+      {%- if product.compare_at_price > product.price -%}
+        <span class="product-card__badge">
+          <span class="badge badge--sale">Sale</span>
+        </span>
+      {%- elsif product.available == false -%}
+        <span class="product-card__badge">
+          <span class="badge badge--sold-out">Sold out</span>
+        </span>
+      {%- endif -%}
+    </a>
+
+    <div class="product-card__body">
+      <h3 class="product-card__title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+
+      <div class="product-card__price">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="product-card__price--compare">{{ product.compare_at_price | money }}</span>
+          <span class="product-card__price--sale">{{ product.price | money }}</span>
+        {%- else -%}
+          {{ product.price | money }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

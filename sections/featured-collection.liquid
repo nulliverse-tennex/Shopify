@@ -1,0 +1,102 @@
+{%- style -%}
+  .featured-collection {
+    padding: var(--space-3xl) 0;
+  }
+
+  .featured-collection__header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .featured-collection__title {
+    font-size: var(--h2);
+  }
+
+  .featured-collection__grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  @media (min-width: 768px) {
+    .featured-collection__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .featured-collection__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{%- endstyle -%}
+
+{%- assign collection = section.settings.collection -%}
+{%- assign products_count = section.settings.products_count -%}
+
+<section class="featured-collection" id="featured-{{ section.id }}">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <div class="featured-collection__header">
+        <h2 class="featured-collection__title glow">{{ section.settings.title | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="featured-collection__grid">
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- for product in collection.products limit: products_count -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..products_count) -%}
+          <div class="product-card">
+            <div class="product-card__image">
+              {{ 'product-' | append: i | placeholder_svg_tag: 'product-card__placeholder' }}
+            </div>
+            <div class="product-card__body">
+              <h3 class="product-card__title">
+                <a href="#">Sample Product {{ i }}</a>
+              </h3>
+              <div class="product-card__price">{{ 1999 | money }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "section-featured-collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

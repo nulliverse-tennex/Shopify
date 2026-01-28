@@ -1,0 +1,93 @@
+{%- comment -%}
+  404 Template Section
+  Terminal-style error with ASCII art and homepage link
+{%- endcomment -%}
+
+<div class="container">
+  <div class="error-404 text-center pt-3xl pb-3xl">
+
+    <div class="error-404__ascii" aria-hidden="true">
+      <pre class="error-404__art">
+    ╔══════════════════════════════════════╗
+    ║                                      ║
+    ║   ██╗  ██╗ ██████╗ ██╗  ██╗          ║
+    ║   ██║  ██║██╔═████╗██║  ██║          ║
+    ║   ███████║██║██╔██║███████║          ║
+    ║   ╚════██║████╔╝██║╚════██║          ║
+    ║        ██║╚██████╔╝     ██║          ║
+    ║        ╚═╝ ╚═════╝      ╚═╝          ║
+    ║                                      ║
+    ╚══════════════════════════════════════╝</pre>
+    </div>
+
+    <div class="error-404__terminal mt-xl">
+      <p class="error-404__prompt">> ERROR 404: PAGE NOT FOUND_</p>
+      <p class="error-404__message mt-md">The requested resource could not be located on this server.</p>
+      <p class="error-404__suggestion mt-sm">The page may have been moved, deleted, or never existed.</p>
+    </div>
+
+    <div class="error-404__actions mt-2xl">
+      <a href="{{ routes.root_url }}" class="btn btn--primary btn--large">
+        > RETURN_HOME
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .error-404 {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-404__art {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    color: var(--color-accent);
+    text-shadow: 0 0 8px var(--color-accent-glow);
+    line-height: 1.2;
+    text-align: left;
+    display: inline-block;
+    white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .error-404__art {
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  .error-404__prompt {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 8px var(--color-accent-glow), 0 0 20px var(--color-accent-soft);
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .error-404__prompt {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  .error-404__message {
+    color: var(--color-text);
+    font-size: var(--font-size-md);
+    margin: 0;
+  }
+
+  .error-404__suggestion {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+</style>

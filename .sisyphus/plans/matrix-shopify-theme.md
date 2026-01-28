@@ -533,7 +533,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 4. Homepage Sections
+- [x] 4. Homepage Sections
 
   **What to do**:
   - Create `sections/hero.liquid`:
@@ -622,7 +622,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 5. Collection + Search Sections
+- [x] 5. Collection + Search Sections
 
   **What to do**:
   - Create `sections/collection-template.liquid`:
@@ -708,7 +708,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 6. Product Detail Section + product.js
+- [x] 6. Product Detail Section + product.js
 
   **What to do**:
   - Create `sections/product-template.liquid`:
@@ -810,7 +810,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 7. Cart Section + Global JS (theme.js)
+- [x] 7. Cart Section + Global JS (theme.js)
 
   **What to do**:
   - Create `sections/cart-template.liquid`:
@@ -923,7 +923,7 @@ Wave 4 (After Wave 3 + 3b — Effects + Final QA):
 
 ---
 
-- [ ] 8. Blog, About, Contact, 404, Password, Gift Card Sections
+- [x] 8. Blog, About, Contact, 404, Password, Gift Card Sections
 
   **What to do**:
   - Create `sections/blog-template.liquid`:

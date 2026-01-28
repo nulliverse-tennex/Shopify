@@ -1,0 +1,219 @@
+{% comment %}
+  Search Template Section
+  Search form + results grid + terminal-style no-results state
+{% endcomment %}
+
+<div class="container">
+  <header class="search-header mb-xl">
+    <h1 class="glow--strong">SEARCH_</h1>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form mt-lg">
+      <div class="search-form__row">
+        <label for="search-input" class="visually-hidden">Search</label>
+        <input
+          type="search"
+          id="search-input"
+          name="q"
+          class="form-input search-form__input"
+          value="{{ search.terms | escape }}"
+          placeholder="enter query_"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <button type="submit" class="btn btn--primary search-form__submit">
+          EXECUTE
+        </button>
+      </div>
+    </form>
+  </header>
+
+  {% if search.performed %}
+    {% paginate search.results by section.settings.results_per_page %}
+
+      {% if search.results_count > 0 %}
+        <div class="search-meta mb-lg">
+          <p class="search-meta__count">
+            <span class="search-meta__prefix" aria-hidden="true">&gt;</span>
+            {{ search.results_count }} result{{ search.results_count | pluralize: '', 's' }} for "{{ search.terms }}"
+          </p>
+        </div>
+
+        <div class="grid grid--3">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              {% render 'product-card', product: item %}
+            {% else %}
+              <article class="search-result-item">
+                <div class="search-result-item__body">
+                  <span class="search-result-item__type badge">{{ item.object_type }}</span>
+                  <h3 class="search-result-item__title mt-sm">
+                    <a href="{{ item.url }}">{{ item.title }}</a>
+                  </h3>
+                  {% if item.content != blank %}
+                    <p class="search-result-item__excerpt mt-xs">
+                      {{ item.content | strip_html | truncatewords: 30 }}
+                    </p>
+                  {% endif %}
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% render 'pagination', paginate: paginate %}
+
+      {% else %}
+        <div class="search-empty text-center pt-3xl pb-3xl">
+          <div class="search-empty__terminal" aria-hidden="true">
+            <span class="search-empty__line">&gt; search --query "{{ search.terms | escape }}"</span>
+            <span class="search-empty__line search-empty__line--error">[ERROR] NO RESULTS FOUND</span>
+            <span class="search-empty__line search-empty__line--dim">0 matches in database_</span>
+          </div>
+          <p class="search-empty__message mt-lg">
+            No results found for "<strong>{{ search.terms }}</strong>"
+          </p>
+          <p class="search-empty__hint mt-sm">Check your spelling or try a different query.</p>
+        </div>
+      {% endif %}
+
+    {% endpaginate %}
+  {% endif %}
+</div>
+
+<style>
+  .search-header {
+    padding-top: var(--space-2xl);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .search-form__row {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 640px;
+  }
+
+  .search-form__input {
+    flex: 1;
+    font-family: var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .search-form__submit {
+    flex-shrink: 0;
+  }
+
+  .search-meta__count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .search-meta__prefix {
+    color: var(--color-accent);
+    margin-right: var(--space-xs);
+  }
+
+  /* Non-product search result items */
+  .search-result-item {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .search-result-item:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-glow-sm);
+  }
+
+  .search-result-item__body {
+    padding: var(--space-md);
+  }
+
+  .search-result-item__title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    line-height: 1.2;
+  }
+
+  .search-result-item__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .search-result-item__title a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .search-result-item__excerpt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  /* No-results terminal state */
+  .search-empty__terminal {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg) var(--space-xl);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    line-height: 1.8;
+  }
+
+  .search-empty__line {
+    color: var(--color-text);
+  }
+
+  .search-empty__line--error {
+    color: var(--color-error);
+    text-shadow: 0 0 5px rgba(255, 68, 68, 0.4);
+  }
+
+  .search-empty__line--dim {
+    color: var(--color-text-muted);
+  }
+
+  .search-empty__message {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .search-empty__hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Search Template",
+  "tag": "section",
+  "class": "search-template",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "min": 12,
+      "max": 36,
+      "step": 12,
+      "default": 12,
+      "label": "Results per page"
+    }
+  ]
+}
+{% endschema %}

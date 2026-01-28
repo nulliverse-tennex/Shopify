@@ -1,4 +1,11 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "page-template",
+      "settings": {
+        "show_title": true
+      }
+    }
+  },
+  "order": ["main"]
 }

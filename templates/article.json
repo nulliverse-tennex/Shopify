@@ -1,4 +1,12 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "article-template",
+      "settings": {
+        "show_author": true,
+        "show_date": true
+      }
+    }
+  },
+  "order": ["main"]
 }

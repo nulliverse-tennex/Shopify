@@ -1,4 +1,9 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "search-template",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
 }

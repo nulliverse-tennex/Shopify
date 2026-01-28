@@ -1,0 +1,82 @@
+{% comment %}
+  Terminal-style pagination: < prev | 1 | 2 | 3 | next >
+  Accepts: paginate object (from {% paginate %} block)
+{% endcomment %}
+
+{% if paginate.pages > 1 %}
+  <nav class="pagination" aria-label="Pagination">
+    <span class="pagination__inner">
+
+      {%- if paginate.previous -%}
+        <a href="{{ paginate.previous.url }}" class="pagination__link pagination__link--prev" aria-label="Previous page">&lt; prev</a>
+      {%- else -%}
+        <span class="pagination__link pagination__link--prev pagination__link--disabled" aria-hidden="true">&lt; prev</span>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        <span class="pagination__separator" aria-hidden="true">|</span>
+        {%- if part.is_link -%}
+          <a href="{{ part.url }}" class="pagination__link pagination__link--number" aria-label="Page {{ part.title }}">{{ part.title }}</a>
+        {%- else -%}
+          {%- if part.title == '&hellip;' -%}
+            <span class="pagination__link pagination__link--ellipsis" aria-hidden="true">...</span>
+          {%- else -%}
+            <span class="pagination__link pagination__link--current" aria-current="page">{{ part.title }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <span class="pagination__separator" aria-hidden="true">|</span>
+
+      {%- if paginate.next -%}
+        <a href="{{ paginate.next.url }}" class="pagination__link pagination__link--next" aria-label="Next page">next &gt;</a>
+      {%- else -%}
+        <span class="pagination__link pagination__link--next pagination__link--disabled" aria-hidden="true">next &gt;</span>
+      {%- endif -%}
+
+    </span>
+  </nav>
+{% endif %}
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-xl) 0;
+  }
+
+  .pagination__inner {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+  }
+
+  .pagination__separator {
+    color: var(--color-text-muted);
+    user-select: none;
+  }
+
+  .pagination__link {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: var(--space-xs) var(--space-xs);
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+  }
+
+  .pagination__link:hover:not(.pagination__link--disabled):not(.pagination__link--current) {
+    color: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .pagination__link--current {
+    color: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent-glow), 0 0 10px var(--color-accent-soft);
+  }
+
+  .pagination__link--disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+</style>

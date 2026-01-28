@@ -119,3 +119,190 @@ Downloaded Fira Code (weights 400, 500, 700) and VT323 (weight 400) in woff2 for
 - `.grid`, `.grid--2`, `.grid--3`, `.grid--4`, `.grid--auto`
 - `.flex`, `.flex--wrap`, `.flex--col`, `.flex--center`, `.flex--between`
 - `.skip-to-content`, `.visually-hidden`
+
+## Task 5: Homepage Sections — Completed
+
+### Files Created
+- `sections/hero.liquid` — Full-width dark panel, VT323 heading, `.typewriter` target, Fira Code subtext, CTA button
+- `sections/featured-collection.liquid` — Section title with `.glow`, product grid using `{% render 'product-card' %}`
+- `sections/rich-text.liquid` — Generic text section with alignment options
+- `snippets/product-card.liquid` — Product image, title link, price with compare-at strikethrough, `.product-card` CSS class
+
+### Key Patterns
+1. **Section-scoped CSS via `{%- style -%}`** — Keeps section styles isolated without polluting global CSS
+2. **Placeholder fallback** — `placeholder_svg_tag` used when no collection assigned or no product image
+3. **`.typewriter` class on `<span>`** with `data-text` attribute — Task 9 typing animation will target this element
+4. **`{% render %}` not `{% include %}`** — Shopify Online Store 2.0 requirement; include is deprecated
+5. **Schema settings max 5 per section** — hero: 5 (heading, subtext, button_text, button_link, enable_typing), featured-collection: 3, rich-text: 3
+
+### Index Template Structure
+- Section IDs: `hero`, `featured`, `about`
+- Maps to types: `hero`, `featured-collection`, `rich-text`
+- Order array: `["hero", "featured", "about"]`
+
+### Pre-existing Theme Check Errors (NOT from this task)
+- 3 errors in product section: ParserBlockingScript, ValidSchema (templates property), MissingAsset (product.js)
+- These exist from prior task work — not introduced by homepage sections
+
+## Task 5b: Collection & Search Sections — Completed
+
+### Files Created
+- `sections/collection-template.liquid` — Collection title with `.glow--strong`, product grid, `{% paginate %}`, empty collection state
+- `sections/search-template.liquid` — Search form (input + EXECUTE button), results grid, terminal-style no-results state
+- `snippets/pagination.liquid` — Terminal-style pagination (`< prev | 1 | 2 | 3 | next >`), pipe separators
+
+### Key Patterns
+1. **`{% paginate collection.products by section.settings.products_per_page %}`** — Schema range setting (12/24/36) controls per-page count
+2. **`{% render 'pagination', paginate: paginate %}`** — Passes paginate object to snippet
+3. **`paginate.parts` loop** — Shopify provides parts array with `is_link`, `url`, `title` properties; handles ellipsis (`&hellip;`) automatically
+4. **Search results type branching** — `item.object_type == 'product'` renders product-card; other types (article, page) get a generic card with badge + excerpt
+5. **No-results terminal block** — Simulated terminal output with `> search --query "..."`, `[ERROR] NO RESULTS FOUND`, `0 matches in database_`
+6. **Schema grid_columns setting** — select with values "2"/"3"/"4" maps to `.grid--2`/`.grid--3`/`.grid--4` CSS classes
+
+### CSS Architecture
+- Section-scoped `<style>` blocks for section-specific styles (collection header, search form, empty states, pagination)
+- Reuses theme.css classes: `.container`, `.grid`, `.grid--3`, `.btn`, `.btn--primary`, `.form-input`, `.glow--strong`, `.badge`, `.visually-hidden`
+- Pagination uses `--font-body` (Fira Code monospace), accent glow on current page, dimmed disabled links
+
+### Template JSON Structure
+- `collection.json`: `{ "sections": { "main": { "type": "collection-template" } }, "order": ["main"] }`
+- `search.json`: `{ "sections": { "main": { "type": "search-template" } }, "order": ["main"] }`
+
+### Verification Checklist
+- `grep -c "{% paginate" sections/collection-template.liquid` = 1 ✓
+- No `sort_by` in collection template ✓
+- Both sections have `{% schema %}` blocks ✓
+- Both sections use `{% render 'product-card' %}` ✓
+- Search has no-results state with "NO RESULTS FOUND" ✓
+- Terminal-style pagination with `< prev | ... | next >` ✓
+- Theme check: 0 errors in new files (3 pre-existing errors from other tasks)
+
+## Task 4: Product Detail Section + JS Web Component — Completed
+
+### Files Created
+- `sections/product-template.liquid` (10.5KB) — two-column grid layout, image gallery left, product info right
+- `assets/product.js` (6.1KB) — `<product-form>` Web Component for variant selection + cart
+- Updated `templates/product.json` to reference `product-template` section
+
+### Key Findings
+
+1. **Schema `templates` Property is Invalid**
+   - Shopify theme check rejects `"templates": ["product"]` in `{% schema %}` — `ValidSchema` error
+   - Use `"presets"` instead for section configurability, or omit entirely for single-use sections
+   - Sections referenced in JSON templates don't need presets
+
+2. **`script_tag` Filter is Parser-Blocking**
+   - `{{ 'file.js' | asset_url | script_tag }}` generates `<script>` without async/defer
+   - Theme check flags this as `ParserBlockingScript` error
+   - Use `<script src="{{ 'file.js' | asset_url }}" defer></script>` instead
+
+3. **Web Component Pattern for Shopify**
+   - `class ProductForm extends HTMLElement` + `customElements.define('product-form', ProductForm)`
+   - Constructor reads DOM via `this.querySelector()` — element already in DOM when custom element upgrades
+   - Product JSON embedded via `<script type="application/json" data-product-json>{{ product | json }}</script>`
+   - Variant matching: collect selected radio values → find variant where `options` array matches
+
+4. **Cart API Pattern**
+   - `window.Shopify.routes.root` provides locale-aware root path (e.g., `/en/` for multi-language)
+   - Fallback to `/cart/add.js` if `Shopify.routes` unavailable
+   - POST body: `{ items: [{ id: variantId, quantity: qty }] }`
+   - Error response parsed from `data.description || data.message`
+
+5. **Variant URL Syncing**
+   - `window.history.replaceState` to update `?variant=ID` without page reload
+   - On load, parse URL params to pre-select matching variant radios
+   - Use `CSS.escape()` for safe attribute selector values with special chars
+
+### CSS Architecture
+- Product-specific styles inlined in `<style>` block within section (not in theme.css)
+- Reuses design system variables: `--color-accent`, `--color-border`, `--space-*`, `--font-heading`, etc.
+- Radio buttons visually hidden, styled labels act as toggle chips with glow on `:checked`
+- Two-column grid at 768px+ breakpoint, single column on mobile
+
+## Task 4b: Cart Page + Global JS + Header/Footer — Completed
+
+### Files Created/Updated
+- `sections/cart-template.liquid` — Cart line items, quantity selector, totals, empty state, checkout button
+- `assets/theme.js` (6.9KB) — `<mobile-menu>` Web Component + CartManager class
+- `sections/header.liquid` — Full header with logo/store name, main nav, cart icon badge, mobile menu
+- `sections/footer.liquid` — Footer nav links, copyright year, ASCII art `> SYSTEM ONLINE_`
+- `templates/cart.json` — References `cart-template` section
+
+### Key Patterns
+
+1. **Cart Removal via qty=0**
+   - Shopify Cart API has no DELETE endpoint; setting quantity to 0 removes the line item
+   - `POST /cart/change.js` with `{ id: lineKey, quantity: 0 }` removes item
+
+2. **Section Rendering API for Cart Updates**
+   - After `cart/change.js`, fetch `/?sections=cart-template` to get fresh HTML
+   - Parse JSON response, extract section HTML, replace `#cart-section` container
+   - Fallback: full page reload if section render fails
+
+3. **Web Component Architecture**
+   - `MobileMenu` extends `HTMLElement` with focus trap, Escape key close, body scroll lock
+   - `CartManager` is a plain class (not a Web Component) — handles event delegation for all cart interactions
+   - Event delegation on `document` for dynamic content (cart section gets replaced after updates)
+
+4. **Header Cart Badge**
+   - `data-cart-count` attribute on badge element
+   - `CartManager.updateCartCount()` updates all `[data-cart-count]` elements after cart API calls
+   - Badge hidden via `hidden` attribute when count is 0
+
+5. **Mobile Menu**
+   - `<mobile-menu>` custom element wraps toggle button, overlay, and drawer nav
+   - Drawer slides from right via `transform: translateX(100%)` → `translateX(0)`
+   - `body.menu-open { overflow: hidden; }` for scroll lock
+   - Focus trap cycles through focusable elements in drawer
+   - Escape key and overlay click close the menu
+
+6. **Header Schema Settings**
+   - `image_picker` for optional logo image (falls back to `shop.name` in VT323 with glow)
+   - `link_list` for main menu with default `main-menu`
+
+7. **Footer ASCII Art**
+   - `> SYSTEM ONLINE_` with blinking animation (`terminal-blink` keyframe)
+   - `aria-hidden="true"` since it's decorative
+
+### Verification Results
+- `grep -c "customElements.define\|Shopify.routes.root"` = 3 (≥ 2) ✓
+- theme.js = 6,984 bytes (< 30KB) ✓
+- All 3 sections have `{% schema %}` blocks ✓
+- Theme check: 0 new errors (2 pre-existing contact form translation errors)
+- Cart has empty state with `{% if cart.item_count == 0 %}`
+- No cart drawer — page-based cart only
+
+## Task 6: Content Pages, Blog, Article, Contact, 404, Password, Gift Card — Completed
+
+### Sections Created
+- `blog-template.liquid`: Blog grid with `{% paginate blog.articles %}`, article cards (image 16:9, title, date, excerpt), pagination snippet
+- `article-template.liquid`: Article with VT323 glow title, author/date meta, featured image, richtext body, back-to-blog link
+- `page-template.liquid`: Generic page (About/custom), `{{ page.content }}` with richtext styles, show_title toggle
+- `contact-form.liquid`: `{% form 'contact' %}` with name/email/message, terminal-style success/error messages
+- `404-template.liquid`: ASCII art 404, terminal prompt `> ERROR 404: PAGE NOT FOUND_`, homepage button, no schema (static)
+- `password-template.liquid`: `{% form 'storefront_password' %}`, store name glow, centered layout, dark minimal
+
+### Gift Card Updates
+- Added full `<style>` block with dark theme: green glow on store name/balance, panel backgrounds, proper code input styling
+- QR code uses Google Charts API via `prepend` filter (RemoteAsset warning is unavoidable — no Shopify-native QR option)
+- Print styles swap to black-on-white and hide actions
+- `gift_card.code | format_code` and `gift_card.balance | money` confirmed working
+
+### Translation Keys Added
+- `contact.form.name`, `contact.form.email`, `contact.form.message` — required for contact form `name` attributes
+- Theme check threw `TranslationKeyExists` error until these were added to `locales/en.default.json`
+
+### JSON Template Pattern
+- All 6 templates: `blog.json`, `article.json`, `page.json`, `page.contact.json`, `404.json`, `password.json`
+- Simple structure: `"sections": { "main": { "type": "section-name", "settings": {...} } }, "order": ["main"]`
+
+### Design Patterns Used
+- Blog cards: 16:9 aspect ratio images, hover scale effect matching product-card pattern
+- Article body: richtext styles (.rte) matching product description pattern
+- Contact form: terminal-style placeholders `> enter_name`, success/error with `>` prompt prefix
+- 404: ASCII art box drawing with Unicode block characters, min-height 60vh centered
+- Password: Full-viewport centered layout, autofocus on password field
+- All sections use `container--narrow` (720px) for content-focused pages except blog (full container)
+
+### Theme Check Result
+- 0 errors, 4 warnings (all pre-existing: RemoteAsset for QR, UndefinedObject for reset_password email, AssetPreload suggestions)

@@ -1,0 +1,125 @@
+{%- style -%}
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, var(--color-accent-dim) 0%, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(0, 255, 65, 0.03) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: var(--z-base);
+    max-width: 800px;
+  }
+
+  .hero__heading {
+    font-size: var(--h1);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__subtext {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .hero__cta {
+    margin-top: var(--space-md);
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      min-height: 90vh;
+    }
+  }
+{%- endstyle -%}
+
+<section class="hero" id="hero-{{ section.id }}">
+  <div class="container hero__inner">
+    {%- if section.settings.heading != blank -%}
+      <h1 class="hero__heading glow--strong">
+        {%- if section.settings.enable_typing -%}
+          <span class="typewriter" data-text="{{ section.settings.heading | escape }}"></span>
+        {%- else -%}
+          {{ section.settings.heading | escape }}
+        {%- endif -%}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtext != blank -%}
+      <p class="hero__subtext">{{ section.settings.subtext | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_text != blank -%}
+      <div class="hero__cta">
+        <a
+          href="{{ section.settings.button_link }}"
+          class="btn btn--primary btn--large"
+        >
+          {{ section.settings.button_text | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to the Matrix"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "You take the red pill, you stay in Wonderland, and I show you how deep the rabbit hole goes."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Enter the Matrix"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_typing",
+      "label": "Enable typing animation",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}
