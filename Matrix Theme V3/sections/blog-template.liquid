@@ -1,0 +1,211 @@
+{%- comment -%}
+  Blog Template Section
+  Renders blog title + article cards grid + terminal pagination
+{%- endcomment -%}
+
+<div class="container">
+  <header class="blog-header mb-xl">
+    <h1 class="glow--strong">{{ blog.title }}</h1>
+  </header>
+
+  {% paginate blog.articles by section.settings.articles_per_page %}
+
+    {% if blog.articles.size > 0 %}
+      <div class="grid grid--auto blog-grid">
+        {% for article in blog.articles %}
+          <article class="blog-card">
+            {%- if article.image -%}
+              <a href="{{ article.url }}" class="blog-card__image-link">
+                <div class="blog-card__image">
+                  <img
+                    src="{{ article.image | image_url: width: 720 }}"
+                    alt="{{ article.image.alt | default: article.title | escape }}"
+                    width="720"
+                    height="{{ 720 | divided_by: article.image.aspect_ratio | ceil }}"
+                    loading="lazy"
+                  >
+                </div>
+              </a>
+            {%- endif -%}
+
+            <div class="blog-card__body">
+              <h2 class="blog-card__title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h2>
+
+              <p class="blog-card__meta">
+                <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                  {{ article.published_at | date: '%b %d, %Y' }}
+                </time>
+              </p>
+
+              {%- if article.excerpt_or_content != blank -%}
+                <div class="blog-card__excerpt">
+                  {{ article.excerpt_or_content | strip_html | truncatewords: 25 }}
+                </div>
+              {%- endif -%}
+
+              <a href="{{ article.url }}" class="blog-card__read-more">> READ_MORE</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% render 'pagination', paginate: paginate %}
+    {% else %}
+      <div class="blog-empty text-center pt-3xl pb-3xl">
+        <p class="blog-empty__icon" aria-hidden="true">[&nbsp;]</p>
+        <p class="blog-empty__message mt-md">NO ARTICLES FOUND_</p>
+        <p class="blog-empty__hint mt-sm">Check back soon for new posts.</p>
+      </div>
+    {% endif %}
+
+  {% endpaginate %}
+</div>
+
+<style>
+  .blog-header {
+    padding-top: var(--space-2xl);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .blog-grid {
+    gap: var(--space-lg);
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .blog-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-glow-sm);
+  }
+
+  .blog-card__image-link {
+    display: block;
+  }
+
+  .blog-card__image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+
+  .blog-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .blog-card:hover .blog-card__image img {
+    transform: scale(1.04);
+  }
+
+  .blog-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    flex: 1;
+  }
+
+  .blog-card__title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .blog-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-card__title a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .blog-card__meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+  }
+
+  .blog-card__excerpt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  .blog-card__read-more {
+    display: inline-block;
+    margin-top: auto;
+    padding-top: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: text-shadow var(--transition-fast);
+  }
+
+  .blog-card__read-more:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .blog-empty__icon {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    color: var(--color-accent);
+    text-shadow: 0 0 8px var(--color-accent-glow);
+    line-height: 1;
+  }
+
+  .blog-empty__message {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .blog-empty__hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog template",
+  "tag": "section",
+  "class": "blog-template-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 6,
+      "label": "Articles per page"
+    }
+  ]
+}
+{% endschema %}

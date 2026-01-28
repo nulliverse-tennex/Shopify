@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-template",
+      "settings": {
+        "enable_quantity": true
+      }
+    }
+  },
+  "order": ["main"]
+}

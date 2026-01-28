@@ -1,0 +1,192 @@
+<div class="customer-account" data-template="account">
+  <div class="container pt-2xl pb-3xl">
+    <div class="customer-account-header flex flex--between flex--align-center flex--wrap mb-xl">
+      <div>
+        <h1 class="glow">{{ 'customer.account.title' | t }}</h1>
+        <p class="customer-account-name mt-xs">{{ customer.name }}</p>
+      </div>
+      <a href="{{ routes.account_logout_url }}" class="btn btn--ghost btn--small">
+        {{ 'customer.account.logout' | t }}
+      </a>
+    </div>
+
+    <div class="customer-account-section mb-2xl">
+      <h2 class="customer-section-title mb-lg">{{ 'customer.account.order_history' | t }}</h2>
+
+      {%- if customer.orders.size > 0 -%}
+        <div class="customer-table-wrap">
+          <table class="customer-table">
+            <thead>
+              <tr>
+                <th>{{ 'customer.account.order_number' | t }}</th>
+                <th>{{ 'customer.account.order_date' | t }}</th>
+                <th>{{ 'customer.account.order_payment_status' | t }}</th>
+                <th>{{ 'customer.account.order_fulfillment_status' | t }}</th>
+                <th class="text-right">{{ 'customer.account.order_total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr>
+                  <td>
+                    <a href="{{ order.customer_url }}" class="customer-order-link">{{ order.name }}</a>
+                  </td>
+                  <td>{{ order.created_at | date: format: 'abbreviated_date' }}</td>
+                  <td>
+                    <span class="badge">{{ order.financial_status_label }}</span>
+                  </td>
+                  <td>
+                    <span class="badge">{{ order.fulfillment_status_label }}</span>
+                  </td>
+                  <td class="text-right customer-order-total">{{ order.total_net_amount | money }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      {%- else -%}
+        <div class="customer-empty-state">
+          <p class="customer-empty-icon" aria-hidden="true">[&nbsp;]</p>
+          <p class="customer-empty-message mt-sm">{{ 'customer.account.no_orders' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="customer-account-section">
+      <h2 class="customer-section-title mb-lg">{{ 'customer.account.details' | t }}</h2>
+      <div class="customer-details-card">
+        <div class="customer-details-address">
+          {{ customer.default_address | format_address }}
+        </div>
+        <a href="{{ routes.account_addresses_url }}" class="btn btn--small mt-md">
+          {{ 'customer.account.view_addresses' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .customer-account-name {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .customer-section-title {
+    font-size: var(--h3);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .customer-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .customer-table th {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-accent);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .customer-table td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+    vertical-align: middle;
+  }
+
+  .customer-table tbody tr {
+    transition: background var(--transition-fast);
+  }
+
+  .customer-table tbody tr:hover {
+    background: var(--color-accent-dim);
+  }
+
+  .customer-order-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    letter-spacing: 0.04em;
+  }
+
+  .customer-order-link:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+
+  .customer-order-total {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    color: var(--color-accent);
+  }
+
+  .customer-empty-state {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-md);
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .customer-empty-icon {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    color: var(--color-accent);
+    text-shadow: 0 0 8px var(--color-accent-glow);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .customer-empty-message {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .customer-details-card {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+  }
+
+  .customer-details-address {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 767px) {
+    .customer-account-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+
+    .customer-table {
+      font-size: var(--font-size-xs);
+    }
+
+    .customer-table th,
+    .customer-table td {
+      padding: var(--space-xs) var(--space-sm);
+    }
+  }
+</style>

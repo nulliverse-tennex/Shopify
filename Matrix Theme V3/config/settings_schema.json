@@ -1,0 +1,168 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Matrix Terminal V3",
+    "theme_version": "3.0.0",
+    "theme_author": "Matrix Dev",
+    "theme_documentation_url": "https://github.com/matrix-terminal-theme/docs",
+    "theme_support_url": "https://github.com/matrix-terminal-theme/support"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Primary colors"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent color",
+        "default": "#00ff41",
+        "info": "Matrix green — used for links, buttons, and highlights"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_secondary",
+        "label": "Secondary accent",
+        "default": "#008f11",
+        "info": "Darker green for hover states and secondary elements"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background color",
+        "default": "#000000",
+        "info": "Base background — pure black"
+      },
+      {
+        "type": "color",
+        "id": "color_panel",
+        "label": "Panel background",
+        "default": "#0a0a0a",
+        "info": "Slightly elevated surfaces"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text color",
+        "default": "#00ff41",
+        "info": "Primary text color"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted text color",
+        "default": "#00802b",
+        "info": "Secondary text, dimmed elements"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border color",
+        "default": "#003b00",
+        "info": "Borders and dividers"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading font",
+        "default": "courier_new_n7"
+      },
+      {
+        "type": "range",
+        "id": "font_heading_scale",
+        "label": "Heading font size scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "courier_new_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_body_scale",
+        "label": "Body font size scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "name": "Effects",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Visual effects"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_scanlines",
+        "label": "Enable scanline overlay",
+        "default": true,
+        "info": "Adds retro CRT scanline effect across the page"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_matrix_rain",
+        "label": "Enable Matrix rain",
+        "default": false,
+        "info": "Animated falling code characters in the background"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_typing_animation",
+        "label": "Enable typing animation",
+        "default": true,
+        "info": "Text appears with a typewriter effect on key elements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_glow",
+        "label": "Enable text glow",
+        "default": true,
+        "info": "Adds phosphor glow to text and interactive elements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_flicker",
+        "label": "Enable CRT flicker",
+        "default": false,
+        "info": "Subtle screen flicker for CRT authenticity"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "96 x 96px .png recommended"
+      }
+    ]
+  }
+]
