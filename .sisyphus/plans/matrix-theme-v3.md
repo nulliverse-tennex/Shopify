@@ -497,7 +497,7 @@ Wave 6 (After All — Integration):
 
 ---
 
-- [ ] 5. Quick Buy — Add to Cart from Collection Pages
+- [x] 5. Quick Buy — Add to Cart from Collection Pages
 
   **What to do**:
   - Create `snippets/quick-buy-button.liquid`:

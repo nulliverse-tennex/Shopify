@@ -1,0 +1,120 @@
+{%- comment -%}
+  Quick Buy Button snippet
+  Accepts: product (Shopify product object)
+  Usage: {% render 'quick-buy-button', product: product %}
+{%- endcomment -%}
+
+{%- if product and product != empty -%}
+  <quick-buy-button class="quick-buy">
+    {%- if product.variants.size == 1 and product.first_available_variant -%}
+      <button
+        type="button"
+        class="quick-buy__btn"
+        data-variant-id="{{ product.first_available_variant.id }}"
+        aria-label="{{ 'product.add_to_cart' | t }} — {{ product.title | escape }}"
+      >
+        <span class="quick-buy__text">[ {{ 'product.add_to_cart' | t | upcase }} ]</span>
+        <span class="quick-buy__loading" hidden>
+          <span class="quick-buy__spinner"></span>
+        </span>
+      </button>
+    {%- elsif product.variants.size > 1 -%}
+      <button
+        type="button"
+        class="quick-buy__btn quick-buy__btn--multi"
+        data-variant-id="{{ product.first_available_variant.id }}"
+        data-product-url="{{ product.url }}"
+        aria-label="{{ 'product.quick_add' | t }} — {{ product.title | escape }}"
+      >
+        <span class="quick-buy__text">[ {{ 'product.quick_add' | t | upcase }} ]</span>
+        <span class="quick-buy__loading" hidden>
+          <span class="quick-buy__spinner"></span>
+        </span>
+      </button>
+    {%- else -%}
+      <button
+        type="button"
+        class="quick-buy__btn quick-buy__btn--disabled"
+        disabled
+        aria-label="{{ 'product.sold_out' | t }} — {{ product.title | escape }}"
+      >
+        <span class="quick-buy__text">[ {{ 'product.sold_out' | t | upcase }} ]</span>
+      </button>
+    {%- endif -%}
+
+    <span class="quick-buy__error" hidden aria-live="polite"></span>
+  </quick-buy-button>
+
+  <style>
+    quick-buy-button {
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    .quick-buy__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      width: 100%;
+      padding: 0.55rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--color-primary, #00ff41);
+      background: transparent;
+      border: 1px solid var(--color-primary, #00ff41);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+
+    .quick-buy__btn:hover:not(:disabled) {
+      background: var(--color-primary, #00ff41);
+      color: var(--color-bg, #0a0a0a);
+      box-shadow: 0 0 12px rgba(0, 255, 65, 0.35);
+    }
+
+    .quick-buy__btn:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .quick-buy__btn--disabled,
+    .quick-buy__btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .quick-buy__loading {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .quick-buy__spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: quick-buy-spin 0.6s linear infinite;
+    }
+
+    @keyframes quick-buy-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .quick-buy__error {
+      display: block;
+      margin-top: 0.35rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.65rem;
+      color: #ff3333;
+      letter-spacing: 0.03em;
+    }
+  </style>
+{%- endif -%}

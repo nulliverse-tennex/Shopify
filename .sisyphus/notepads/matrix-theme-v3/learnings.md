@@ -152,3 +152,24 @@ All 7 acceptance criteria pass:
 ✅ AC5: enable_order_notes in cart-drawer.liquid: 1 (>= 1) ✓
 
 All 5 acceptance criteria PASSED.
+
+## Wave 3: Quick Buy Feature (Task 5)
+
+### Completed Changes
+- ✅ Created quick-buy-button.liquid with single/multi-variant/sold-out logic
+- ✅ Created quick-buy.js Web Component (2394 bytes ≤ 6KB budget)
+- ✅ Updated product-card.liquid with conditional quick-buy render
+- ✅ Updated theme.liquid with conditional quick-buy.js loading
+
+### Key Decisions
+- Multi-variant products: added first_available_variant.id as data-variant-id AND data-product-url for future modal (Task 6)
+- Styles inlined in liquid snippet (scoped to quick-buy-button element) matching Matrix terminal aesthetic
+- Used same cart add pattern as product.js (POST /cart/add.js with items array)
+- Loading state hides text, shows spinner; re-enables button on complete
+- Event dispatch matches cart-drawer listener: cart:item-added with variant_id in detail
+
+### Patterns
+- Web Component pattern: connectedCallback binds click, no shadow DOM (consistent with cart-drawer.js/product.js)
+- Error handling: inline red text below button, uses aria-live for screen readers
+- Button styling: Fira Code monospace, green glow hover, dashed border when disabled
+

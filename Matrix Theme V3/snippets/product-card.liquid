@@ -43,6 +43,10 @@
           {{ product.price | money }}
         {%- endif -%}
       </div>
+
+      {% if settings.enable_quick_buy %}
+        {% render 'quick-buy-button', product: product %}
+      {% endif %}
     </div>
   </div>
 {%- endif -%}
