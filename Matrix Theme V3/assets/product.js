@@ -202,8 +202,19 @@ class ProductForm extends HTMLElement {
         }
         return response.json();
       })
-      .then(function () {
-        window.location.href = '/cart';
+      .then(function (responseData) {
+        var useDrawer = self.form && self.form.dataset.cartDrawer === 'true';
+        if (useDrawer) {
+          document.dispatchEvent(new CustomEvent('cart:item-added', {
+            detail: { items: responseData.items || responseData }
+          }));
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Add to Cart';
+          }
+        } else {
+          window.location.href = '/cart';
+        }
       })
       .catch(function (error) {
         self._showError(error.message || 'Something went wrong. Please try again.');

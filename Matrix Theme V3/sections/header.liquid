@@ -36,7 +36,7 @@
     </nav>
 
     <div class="site-header__actions flex flex--align-center flex--gap-md">
-      <a href="{{ routes.cart_url }}" class="site-header__cart-link" aria-label="Cart">
+      <a href="{{ routes.cart_url }}" class="site-header__cart-link" aria-label="Cart"{% if settings.enable_cart_drawer %} data-cart-drawer-open{% endif %}>
         <span class="site-header__cart-icon" aria-hidden="true">[&nbsp;</span>
         <span class="site-header__cart-text">CART</span>
         <span
@@ -93,7 +93,7 @@
           {%- endif -%}
 
           <div class="mobile-menu__footer">
-            <a href="{{ routes.cart_url }}" class="mobile-menu__link">
+            <a href="{{ routes.cart_url }}" class="mobile-menu__link"{% if settings.enable_cart_drawer %} data-cart-drawer-open{% endif %}>
               > CART [{{ cart.item_count }}]_
             </a>
           </div>

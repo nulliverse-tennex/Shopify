@@ -68,3 +68,50 @@ All 9 acceptance criteria pass:
 5. `config/settings_schema.json` — 5 new settings groups
 6. `config/settings_data.json` — 27 new setting defaults in current + presets
 7. `locales/en.default.json` — 30+ locale keys across 3 new namespaces + expanded existing ones
+
+## Wave 3: Cart Drawer Feature (Task 3)
+
+### Completed Changes
+- ✅ `sections/cart-drawer.liquid` — Full drawer section with overlay, panel, empty state, line items via snippet, subtotal, checkout, bubble variant
+- ✅ `assets/cart-drawer.js` — `<cart-drawer>` Web Component (7,503 bytes ≤ 8KB) with open/close/refresh, focus trap, scroll lock, quantity controls, Section Rendering API
+- ✅ `snippets/cart-drawer-item.liquid` — Compact line item: 64x64 thumb, title+variant, price, quantity controls, remove, line total
+- ✅ `layout/theme.liquid` — Conditional section + JS loading via `settings.enable_cart_drawer`
+- ✅ `assets/product.js` — Dispatches `cart:item-added` when `data-cart-drawer="true"`, otherwise keeps redirect
+- ✅ `sections/product-template.liquid` — Added `data-cart-drawer: settings.enable_cart_drawer` to form tag
+- ✅ `sections/header.liquid` — Both desktop and mobile cart links get `data-cart-drawer-open` when drawer enabled
+
+### Key Decisions
+1. **stopPropagation on drawer quantity controls** — CartManager in theme.js uses document-level click delegation for `[data-quantity-minus/plus]` and `[data-remove-item]`. Without stopPropagation, drawer clicks would bubble to CartManager, causing duplicate `/cart/change.js` requests. Drawer handles its own quantity changes and dispatches `cart:updated` to trigger its own refresh.
+2. **Event flow**: `_changeQuantity()` → dispatches `cart:updated` → listener calls `refresh()`. No direct `refresh()` call in `_changeQuantity` — single event-driven path prevents double-refresh.
+3. **Section Rendering API** — `refresh()` fetches `/?sections=cart-drawer`, replaces body innerHTML, footer element, and bubble count. Also updates header `[data-cart-count]` badges (filtering out badges inside `cart-drawer` to avoid recursion).
+4. **Drawer vs Bubble modes** via `settings.cart_type`: "drawer" = no floating button (opens via header link + add-to-cart events); "bubble" = floating button bottom-right with pulse animation.
+5. **Focus trap** follows MobileMenu pattern exactly — query focusable elements, track first/last, Tab wraps, Escape closes.
+6. **product.js branching** — `data-cart-drawer` attribute on `<form>` tag, read via `self.form.dataset.cartDrawer`. When `'true'`: dispatch event + re-enable button. When falsy: keep existing `/cart` redirect.
+7. **Cart drawer JS loads after theme.js** — ensures `lockScroll`/`unlockScroll` and `CartManager` are available. Uses `typeof lockScroll === 'function'` guard for safety.
+8. **Drawer section placed before `</body>`** (after all scripts) to ensure it's outside `<main>` and accessible as an overlay.
+
+### Verification Results
+All 7 acceptance criteria pass:
+- AC1: cart-drawer.liquid with panel/overlay/empty/items/schema ✅
+- AC2: cart-drawer.js Web Component, 7503B ≤ 8192B, open/close/refresh/lockScroll/focusTrap ✅
+- AC3: cart-drawer-item.liquid with image/qty/remove/price ✅
+- AC4: theme.liquid conditionally loads section + JS ✅
+- AC5: product.js dispatches cart:item-added (1 event, 1 dataset check, 1 fallback redirect) ✅
+- AC6: header.liquid data-cart-drawer-open on 2 links (desktop + mobile) ✅
+- AC7: Bubble mode with data-drawer-bubble + conditional rendering ✅
+
+### Files Created (3)
+1. `sections/cart-drawer.liquid` — Drawer section + all CSS
+2. `assets/cart-drawer.js` — Web Component (7,503 bytes)
+3. `snippets/cart-drawer-item.liquid` — Line item snippet
+
+### Files Modified (4)
+1. `layout/theme.liquid` — Conditional drawer section + JS loading
+2. `assets/product.js` — cart:item-added dispatch with drawer check
+3. `sections/product-template.liquid` — data-cart-drawer attribute on form
+4. `sections/header.liquid` — data-cart-drawer-open on cart links
+
+### Gotchas for Future Tasks
+- CartManager's document-level click handlers conflict with any new component using `[data-quantity-minus/plus]` or `[data-remove-item]` — must use `stopPropagation()` in new components
+- Section Rendering API returns HTML keyed by section filename (e.g., `data['cart-drawer']`) — the sectionId must match the file name exactly
+- The `cart:updated` event is dispatched by both CartManager (for cart page) and CartDrawer (for drawer quantity changes) — listeners should be idempotent

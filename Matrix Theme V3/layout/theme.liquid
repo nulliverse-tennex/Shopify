@@ -84,6 +84,9 @@
 
     <script>window.Shopify = window.Shopify || {}; window.Shopify.moneyFormat = {{ shop.money_format | json }};</script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    {% if settings.enable_cart_drawer %}<script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>{% endif %}
     <script src="{{ 'matrix-rain.js' | asset_url }}" defer></script>
+
+    {% if settings.enable_cart_drawer %}{% section 'cart-drawer' %}{% endif %}
   </body>
 </html>

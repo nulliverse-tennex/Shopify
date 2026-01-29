@@ -1,0 +1,453 @@
+<cart-drawer class="cart-drawer" id="cart-drawer" aria-hidden="true" data-cart-type="{{ settings.cart_type }}">
+  <div class="cart-drawer__overlay" data-drawer-overlay></div>
+
+  <div class="cart-drawer__panel" data-drawer-panel role="dialog" aria-modal="true" aria-label="{{ 'cart.drawer_title' | t }}">
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__title glow">> CART_</h2>
+      <button
+        type="button"
+        class="cart-drawer__close"
+        data-drawer-close
+        aria-label="{{ 'accessibility.close' | t }}"
+      >[X]</button>
+    </div>
+
+    <div class="cart-drawer__body" data-drawer-body>
+      {% if cart.item_count == 0 %}
+        <div class="cart-drawer__empty">
+          <p class="cart-drawer__empty-text glow--strong">[ CART EMPTY ]</p>
+          <p class="cart-drawer__empty-sub">> No items loaded into memory_</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary btn--block">
+            Continue Shopping
+          </a>
+        </div>
+      {% else %}
+        <div class="cart-drawer__items">
+          {% for item in cart.items %}
+            {% render 'cart-drawer-item', item: item %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__subtotal">
+          <span class="cart-drawer__subtotal-label">SUBTOTAL</span>
+          <span class="cart-drawer__subtotal-value glow" data-cart-subtotal>{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-drawer__note">Taxes and shipping calculated at checkout</p>
+        <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--block cart-drawer__view-cart">
+          [ VIEW FULL CART ]
+        </a>
+        <button type="button" class="btn btn--primary btn--block cart-drawer__checkout" data-drawer-checkout onclick="window.location.href='/checkout';">
+          [ CHECKOUT ]
+        </button>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if settings.cart_type == 'bubble' %}
+    <button
+      type="button"
+      class="cart-drawer__bubble"
+      data-drawer-bubble
+      aria-label="Open cart"
+    >
+      <span class="cart-drawer__bubble-icon" aria-hidden="true">[&nbsp;</span>
+      <span class="cart-drawer__bubble-count" data-cart-count>{{ cart.item_count }}</span>
+      <span class="cart-drawer__bubble-icon" aria-hidden="true">&nbsp;]</span>
+    </button>
+  {% endif %}
+</cart-drawer>
+
+<style>
+  /* ---- Cart Drawer Panel ---- */
+  .cart-drawer__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: var(--z-cart-drawer, 900);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .cart-drawer.active .cart-drawer__overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .cart-drawer__panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 90vw);
+    z-index: calc(var(--z-cart-drawer, 900) + 1);
+    background: var(--color-bg);
+    border-left: 1px solid var(--color-accent);
+    box-shadow: -4px 0 24px rgba(0, 255, 65, 0.1), -1px 0 0 rgba(0, 255, 65, 0.2);
+    transform: translateX(100%);
+    transition: transform var(--transition-slow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cart-drawer.active .cart-drawer__panel {
+    transform: translateX(0);
+  }
+
+  /* Header */
+  .cart-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .cart-drawer__title {
+    font-family: var(--font-heading);
+    font-size: var(--h4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .cart-drawer__close {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    color: var(--color-accent);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-xs) var(--space-sm);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .cart-drawer__close:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-dim);
+  }
+
+  /* Body — scrollable */
+  .cart-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .cart-drawer__body::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .cart-drawer__body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .cart-drawer__body::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 2px;
+  }
+
+  /* Items list */
+  .cart-drawer__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* Empty state */
+  .cart-drawer__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-3xl) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .cart-drawer__empty-text {
+    font-family: var(--font-heading);
+    font-size: var(--h4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .cart-drawer__empty-sub {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  /* Footer */
+  .cart-drawer__footer {
+    flex-shrink: 0;
+    padding: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .cart-drawer__subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .cart-drawer__subtotal-label {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text);
+  }
+
+  .cart-drawer__subtotal-value {
+    font-family: var(--font-heading);
+    font-size: var(--h4);
+    color: var(--color-accent);
+  }
+
+  .cart-drawer__note {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .cart-drawer__view-cart {
+    font-size: var(--font-size-sm);
+  }
+
+  /* ---- Drawer Item Styles ---- */
+  .drawer-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-xs) var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color var(--transition-base);
+  }
+
+  .drawer-item:hover {
+    border-color: var(--color-accent-glow);
+  }
+
+  .drawer-item__image {
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    grid-row: 1 / -1;
+  }
+
+  .drawer-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .drawer-item__no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .drawer-item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .drawer-item__title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+
+  .drawer-item__title:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .drawer-item__variant {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .drawer-item__price {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .drawer-item__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .drawer-item__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .drawer-item__qty-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    color: var(--color-accent);
+    background: var(--color-panel);
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .drawer-item__qty-btn:hover {
+    background: var(--color-accent-dim);
+  }
+
+  .drawer-item__qty-input {
+    width: 36px;
+    height: 28px;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    font-family: var(--font-heading);
+    border: none;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    -moz-appearance: textfield;
+  }
+
+  .drawer-item__qty-input::-webkit-outer-spin-button,
+  .drawer-item__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .drawer-item__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .drawer-item__line-total {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+  }
+
+  .drawer-item__remove {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 2px 6px;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .drawer-item__remove:hover {
+    color: #ff4444;
+    border-color: #ff4444;
+  }
+
+  /* ---- Floating Bubble ---- */
+  .cart-drawer__bubble {
+    position: fixed;
+    bottom: var(--space-xl);
+    right: var(--space-xl);
+    z-index: var(--z-cart-drawer, 900);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius);
+    padding: var(--space-sm) var(--space-md);
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    animation: bubble-pulse 2s ease-in-out infinite;
+  }
+
+  .cart-drawer__bubble:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.5), 0 6px 16px rgba(0, 0, 0, 0.6);
+  }
+
+  .cart-drawer__bubble-count {
+    min-width: 1.2em;
+    text-align: center;
+  }
+
+  @keyframes bubble-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5); }
+    50% { box-shadow: 0 0 28px rgba(0, 255, 65, 0.45), 0 4px 12px rgba(0, 0, 0, 0.5); }
+  }
+
+  /* Hide bubble when drawer is open */
+  .cart-drawer.active .cart-drawer__bubble {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "tag": "div",
+  "class": "section-cart-drawer",
+  "settings": []
+}
+{% endschema %}

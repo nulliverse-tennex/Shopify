@@ -353,7 +353,7 @@ Wave 6 (After All — Integration):
 
 ---
 
-- [ ] 3. Cart Drawer — Slide-out Drawer + Floating Bubble
+- [x] 3. Cart Drawer — Slide-out Drawer + Floating Bubble
 
   **What to do**:
   - Create `sections/cart-drawer.liquid`:

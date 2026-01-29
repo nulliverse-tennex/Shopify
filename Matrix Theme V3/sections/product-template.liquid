@@ -51,7 +51,7 @@
         </div>
 
         <product-form>
-          {%- form 'product', product, id: 'product-form', novalidate: 'novalidate', data-product-form: '' -%}
+          {%- form 'product', product, id: 'product-form', novalidate: 'novalidate', data-product-form: '', data-cart-drawer: settings.enable_cart_drawer -%}
 
             <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
 
