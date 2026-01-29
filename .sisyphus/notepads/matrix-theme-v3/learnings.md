@@ -115,3 +115,40 @@ All 7 acceptance criteria pass:
 - CartManager's document-level click handlers conflict with any new component using `[data-quantity-minus/plus]` or `[data-remove-item]` — must use `stopPropagation()` in new components
 - Section Rendering API returns HTML keyed by section filename (e.g., `data['cart-drawer']`) — the sectionId must match the file name exactly
 - The `cart:updated` event is dispatched by both CartManager (for cart page) and CartDrawer (for drawer quantity changes) — listeners should be idempotent
+
+## Wave 3: Order Notes + Gift Wrapping (Task 4)
+
+### Completed Changes
+- ✅ Added order notes textarea to cart-template.liquid with `settings.enable_order_notes` conditional
+- ✅ Added gift wrapping checkbox + optional message textarea to cart-template.liquid with `settings.enable_gift_wrapping` conditional
+- ✅ Added identical order notes and gift wrapping blocks to cart-drawer.liquid
+- ✅ All form fields use `form="cart"` attribute to associate with cart form
+- ✅ Order notes use `name="note"` and display `{{ cart.note }}`
+- ✅ Gift wrapping uses `name="attributes[gift_wrapping]"` (Shopify cart attributes)
+- ✅ Optional gift message uses `name="attributes[gift_message]"`
+- ✅ Gift wrap fee displays `{{ settings.gift_wrap_fee }}` (display-only, no actual charging)
+- ✅ Styling uses existing Matrix theme classes and custom drawer-specific styles
+
+### Key Decisions
+- **Form ID Consistency**: Changed cart-template.liquid form ID from "cart-form" to "cart" to match standard Shopify cart form naming
+- **Global Settings**: Used `settings.enable_order_notes` and `settings.enable_gift_wrapping` (from Task 2 foundation) instead of section-level settings
+- **Drawer Form Structure**: Added a separate form wrapper in cart-drawer.liquid footer to contain order notes and gift wrapping fields before checkout button
+- **Locale Keys**: Used translation keys from Task 2: `cart.order_note_placeholder`, `cart.gift_wrap_fee`, `cart.gift_message_placeholder`, `cart.gift_wrap_label`
+- **Responsive Sizing**: Drawer textarea fields use smaller font sizes (`font-size-xs`) and fewer rows to fit compact drawer layout
+- **CSS Organization**: Added dedicated drawer-specific styles (.cart-drawer__form, .cart-drawer__order-note, .cart-drawer__gift-wrap) to maintain separation of concerns
+
+### Gotchas & Learnings
+- **Form Association**: Both cart-template and cart-drawer use `form="cart"` attribute on textareas/inputs to associate with the cart form, allowing fields outside the form tag to submit with it
+- **Cart Attributes Syntax**: Shopify cart attributes use bracket notation in form field names: `name="attributes[key_name]"` which automatically creates key-value pairs in the cart object
+- **Display-Only Fee**: Gift wrap fee is purely informational (no JavaScript calculation). Actual charging would require Shopify Scripts or manual order adjustment by merchant
+- **Drawer Layout**: Order notes and gift wrapping placed in footer section before checkout button for logical flow (order-level notes before final action)
+- **Locale Key Naming**: Followed existing pattern: `cart.order_note_placeholder`, `cart.gift_wrap_fee`, `cart.gift_wrap_label`, `cart.gift_message_placeholder`
+
+### Verification Results
+✅ AC1: enable_order_notes in cart-template.liquid: 1 (>= 1) ✓
+✅ AC2: enable_gift_wrapping in cart-template.liquid: 1 (>= 1) ✓
+✅ AC3: name="note" in cart-template.liquid: 1 (>= 1) ✓
+✅ AC4: attributes[gift_wrapping] in cart-template.liquid: 1 (>= 1) ✓
+✅ AC5: enable_order_notes in cart-drawer.liquid: 1 (>= 1) ✓
+
+All 5 acceptance criteria PASSED.

@@ -31,6 +31,53 @@
     </div>
 
     {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post" id="cart" class="cart-drawer__form">
+        {% if settings.enable_order_notes %}
+          <div class="cart-drawer__order-note">
+            <label for="drawer-cart-note" class="form-label" style="font-size: var(--font-size-sm);">> Order Note_</label>
+            <textarea
+              id="drawer-cart-note"
+              name="note"
+              form="cart"
+              class="form-textarea"
+              placeholder="{{ 'cart.order_note_placeholder' | t }}"
+              rows="2"
+              style="font-size: var(--font-size-xs);"
+            >{{ cart.note }}</textarea>
+          </div>
+        {% endif %}
+
+        {% if settings.enable_gift_wrapping %}
+          <div class="cart-drawer__gift-wrap">
+            <div class="cart-drawer__gift-wrap-checkbox">
+              <input
+                type="checkbox"
+                id="drawer-gift-wrapping"
+                name="attributes[gift_wrapping]"
+                value="Yes"
+                form="cart"
+              >
+              <label for="drawer-gift-wrapping" class="form-label" style="font-size: var(--font-size-sm);">> {{ 'cart.gift_wrap_label' | t }}_</label>
+            </div>
+            <p class="cart-drawer__gift-wrap-fee" style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 4px;">
+              {{ 'cart.gift_wrap_fee' | t }}: {{ settings.gift_wrap_fee }}
+            </p>
+            <div class="cart-drawer__gift-wrap-message">
+              <label for="drawer-gift-message" class="form-label" style="font-size: var(--font-size-xs);">> Gift Message_</label>
+              <textarea
+                id="drawer-gift-message"
+                name="attributes[gift_message]"
+                form="cart"
+                class="form-textarea"
+                placeholder="{{ 'cart.gift_message_placeholder' | t }}"
+                rows="1"
+                style="font-size: var(--font-size-xs);"
+              ></textarea>
+            </div>
+          </div>
+        {% endif %}
+      </form>
+
       <div class="cart-drawer__footer">
         <div class="cart-drawer__subtotal">
           <span class="cart-drawer__subtotal-label">SUBTOTAL</span>
@@ -40,7 +87,7 @@
         <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--block cart-drawer__view-cart">
           [ VIEW FULL CART ]
         </a>
-        <button type="button" class="btn btn--primary btn--block cart-drawer__checkout" data-drawer-checkout onclick="window.location.href='/checkout';">
+        <button type="submit" form="cart" class="btn btn--primary btn--block cart-drawer__checkout">
           [ CHECKOUT ]
         </button>
       </div>
@@ -435,12 +482,64 @@
     50% { box-shadow: 0 0 28px rgba(0, 255, 65, 0.45), 0 4px 12px rgba(0, 0, 0, 0.5); }
   }
 
-  /* Hide bubble when drawer is open */
-  .cart-drawer.active .cart-drawer__bubble {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.8);
-  }
+   /* Hide bubble when drawer is open */
+   .cart-drawer.active .cart-drawer__bubble {
+     opacity: 0;
+     pointer-events: none;
+     transform: scale(0.8);
+   }
+
+   /* ---- Order Notes & Gift Wrapping ---- */
+   .cart-drawer__form {
+     padding: var(--space-md);
+     border-top: 1px solid var(--color-border);
+     display: flex;
+     flex-direction: column;
+     gap: var(--space-md);
+   }
+
+   .cart-drawer__order-note {
+     display: flex;
+     flex-direction: column;
+     gap: var(--space-xs);
+   }
+
+   .cart-drawer__order-note .form-textarea {
+     max-width: 100%;
+   }
+
+   .cart-drawer__gift-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: var(--space-xs);
+   }
+
+   .cart-drawer__gift-wrap-checkbox {
+     display: flex;
+     align-items: center;
+     gap: var(--space-sm);
+   }
+
+   .cart-drawer__gift-wrap-checkbox input[type="checkbox"] {
+     width: 16px;
+     height: 16px;
+     cursor: pointer;
+   }
+
+   .cart-drawer__gift-wrap-fee {
+     margin: 0;
+   }
+
+   .cart-drawer__gift-wrap-message {
+     display: flex;
+     flex-direction: column;
+     gap: 4px;
+   }
+
+   .cart-drawer__gift-wrap-message .form-textarea {
+     max-width: 100%;
+   }
+ }
 </style>
 
 {% schema %}

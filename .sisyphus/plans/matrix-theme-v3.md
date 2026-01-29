@@ -442,7 +442,7 @@ Wave 6 (After All — Integration):
 
 ---
 
-- [ ] 4. Order Notes + Gift Wrapping
+- [x] 4. Order Notes + Gift Wrapping
 
   **What to do**:
   - **Order Notes**: Update `sections/cart-template.liquid` and `sections/cart-drawer.liquid`:
