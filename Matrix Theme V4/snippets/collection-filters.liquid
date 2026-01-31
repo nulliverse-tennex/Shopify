@@ -1,0 +1,71 @@
+{%- if collection.filters.size > 0 -%}
+<collection-filters>
+  <form id="collection-filters-form" data-filters-form>
+    <div class="collection-filters">
+      <h3 class="collection-filters__title glow">> FILTERS_</h3>
+      
+      {%- for filter in collection.filters -%}
+        <div class="collection-filter" data-filter-type="{{ filter.type }}">
+          <h4 class="collection-filter__label">{{ filter.label }}</h4>
+          
+          {%- case filter.type -%}
+            {%- when 'list' -%}
+              {%- for value in filter.values -%}
+                <label class="collection-filter__option">
+                  <input
+                    type="checkbox"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    {% if value.active %}checked{% endif %}
+                  >
+                  <span>{{ value.label }} ({{ value.count }})</span>
+                </label>
+              {%- endfor -%}
+            
+            {%- when 'price_range' -%}
+              <div class="collection-filter__price-range">
+                <input
+                  type="number"
+                  name="{{ filter.min_value.param_name }}"
+                  placeholder="Min"
+                  min="0"
+                  value="{{ filter.min_value.value | default: '' }}"
+                >
+                <input
+                  type="number"
+                  name="{{ filter.max_value.param_name }}"
+                  placeholder="Max"
+                  min="0"
+                  value="{{ filter.max_value.value | default: '' }}"
+                >
+              </div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+
+      {%- if collection.active_filters.size > 0 -%}
+        <div class="collection-filters__active">
+          <h4>Active Filters:</h4>
+          {%- for filter in collection.active_filters -%}
+            <a href="{{ filter.url_to_remove }}" class="btn btn--small" data-filter-remove>
+              {{ filter.label }} ✕
+            </a>
+          {%- endfor -%}
+          <a href="{{ collection.url }}" class="btn btn--small btn--ghost">Clear All</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </form>
+</collection-filters>
+
+<style>
+  .collection-filters { padding: var(--space-lg); border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: var(--space-xl); }
+  .collection-filters__title { font-size: var(--font-size-xl); margin-bottom: var(--space-md); }
+  .collection-filter { margin-bottom: var(--space-lg); }
+  .collection-filter__label { font-family: var(--font-heading); font-size: var(--font-size-md); color: var(--color-accent); margin-bottom: var(--space-sm); }
+  .collection-filter__option { display: block; margin-bottom: var(--space-xs); font-size: var(--font-size-sm); cursor: pointer; }
+  .collection-filter__price-range { display: flex; gap: var(--space-sm); }
+  .collection-filter__price-range input { flex: 1; }
+  .collection-filters__active { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+</style>
+{%- endif -%}

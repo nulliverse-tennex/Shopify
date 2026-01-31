@@ -1,0 +1,403 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Matrix Terminal V4",
+    "theme_version": "4.0.0",
+    "theme_author": "Matrix Dev",
+    "theme_documentation_url": "https://github.com/matrix-terminal-theme/docs",
+    "theme_support_url": "https://github.com/matrix-terminal-theme/support"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Primary colors"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent color",
+        "default": "#00ff41",
+        "info": "Matrix green — used for links, buttons, and highlights"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_secondary",
+        "label": "Secondary accent",
+        "default": "#008f11",
+        "info": "Darker green for hover states and secondary elements"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background color",
+        "default": "#000000",
+        "info": "Base background — pure black"
+      },
+      {
+        "type": "color",
+        "id": "color_panel",
+        "label": "Panel background",
+        "default": "#0a0a0a",
+        "info": "Slightly elevated surfaces"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text color",
+        "default": "#00ff41",
+        "info": "Primary text color"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted text color",
+        "default": "#00802b",
+        "info": "Secondary text, dimmed elements"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border color",
+        "default": "#003b00",
+        "info": "Borders and dividers"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading font",
+        "default": "courier_new_n7"
+      },
+      {
+        "type": "range",
+        "id": "font_heading_scale",
+        "label": "Heading font size scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "courier_new_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_body_scale",
+        "label": "Body font size scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "default": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "name": "Effects",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Visual effects"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_scanlines",
+        "label": "Enable scanline overlay",
+        "default": true,
+        "info": "Adds retro CRT scanline effect across the page"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_matrix_rain",
+        "label": "Enable Matrix rain",
+        "default": false,
+        "info": "Animated falling code characters in the background"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_typing_animation",
+        "label": "Enable typing animation",
+        "default": true,
+        "info": "Text appears with a typewriter effect on key elements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_glow",
+        "label": "Enable text glow",
+        "default": true,
+        "info": "Adds phosphor glow to text and interactive elements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_flicker",
+        "label": "Enable CRT flicker",
+        "default": false,
+        "info": "Subtle screen flicker for CRT authenticity"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "96 x 96px .png recommended"
+      }
+    ]
+  },
+  {
+    "name": "Cart Features",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cart drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer",
+        "label": "Enable cart drawer",
+        "default": false,
+        "info": "Slide-out cart drawer instead of navigating to the cart page"
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "bubble", "label": "Floating bubble" }
+        ],
+        "default": "drawer",
+        "info": "Choose between a slide-out drawer or floating cart bubble"
+      },
+      {
+        "type": "header",
+        "content": "Cart enhancements"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_order_notes",
+        "label": "Enable order notes",
+        "default": false,
+        "info": "Allow customers to add a note to their order"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_gift_wrapping",
+        "label": "Enable gift wrapping",
+        "default": false,
+        "info": "Offer gift wrapping option in the cart"
+      },
+      {
+        "type": "text",
+        "id": "gift_wrap_fee",
+        "label": "Gift wrap fee",
+        "default": "$5.00",
+        "info": "Display price for gift wrapping (display only)"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Navigation features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_header",
+        "label": "Enable sticky header",
+        "default": false,
+        "info": "Header stays visible when scrolling down"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_back_to_top",
+        "label": "Enable back-to-top button",
+        "default": false,
+        "info": "Show a scroll-to-top button after scrolling down"
+      }
+    ]
+  },
+  {
+    "name": "Product Highlights",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product page features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_stock_counter",
+        "label": "Enable stock counter",
+        "default": false,
+        "info": "Show low-stock warning when inventory is below threshold"
+      },
+      {
+        "type": "range",
+        "id": "stock_threshold",
+        "label": "Stock threshold",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 10,
+        "info": "Show low-stock warning when inventory is at or below this number"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_buy",
+        "label": "Enable quick buy",
+        "default": false,
+        "info": "Add quick add-to-cart buttons on product cards"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_view",
+        "label": "Enable quick view",
+        "default": false,
+        "info": "Allow viewing product details in a modal popup"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_recommended_products",
+        "label": "Enable recommended products",
+        "default": false,
+        "info": "Show product recommendations on product pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_recently_viewed",
+        "label": "Enable recently viewed",
+        "default": false,
+        "info": "Track and display recently viewed products"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_collection_filtering",
+        "label": "Enable collection filtering",
+        "default": false,
+        "info": "Show filter sidebar on collection pages"
+      }
+    ]
+  },
+  {
+    "name": "Marketing & Promotions",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Promotional features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_promo_banner",
+        "label": "Enable promo banner",
+        "default": false,
+        "info": "Show an announcement banner above the header"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_promo_popup",
+        "label": "Enable promo popup",
+        "default": false,
+        "info": "Show a promotional popup to visitors"
+      },
+      {
+        "type": "select",
+        "id": "popup_type",
+        "label": "Popup type",
+        "options": [
+          { "value": "email", "label": "Email capture" },
+          { "value": "announcement", "label": "Announcement" }
+        ],
+        "default": "email",
+        "info": "Choose between email signup or announcement popup"
+      },
+      {
+        "type": "range",
+        "id": "popup_delay",
+        "label": "Popup delay (seconds)",
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "default": 5,
+        "info": "Seconds before the popup appears"
+      },
+      {
+        "type": "text",
+        "id": "popup_heading",
+        "label": "Popup heading",
+        "default": ""
+      },
+      {
+        "type": "textarea",
+        "id": "popup_text",
+        "label": "Popup text",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "popup_button_text",
+        "label": "Popup button text",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "Countdown Timer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Countdown timer"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_countdown",
+        "label": "Enable countdown timer",
+        "default": false,
+        "info": "Show a countdown banner for promotions"
+      },
+      {
+        "type": "text",
+        "id": "countdown_end_date",
+        "label": "Countdown end date",
+        "default": "",
+        "info": "ISO 8601 format, e.g. 2026-03-01T00:00:00Z"
+      },
+      {
+        "type": "text",
+        "id": "countdown_label",
+        "label": "Countdown label",
+        "default": "",
+        "info": "Text to display before the countdown"
+      },
+      {
+        "type": "text",
+        "id": "countdown_expired_message",
+        "label": "Expired message",
+        "default": "",
+        "info": "Message shown when the countdown has ended"
+      }
+    ]
+  }
+]

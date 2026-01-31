@@ -1,0 +1,99 @@
+{%- style -%}
+  .rich-text {
+    padding: var(--space-3xl) 0;
+  }
+
+  .rich-text__content {
+    max-width: 720px;
+  }
+
+  .rich-text__content--left {
+    margin-right: auto;
+  }
+
+  .rich-text__content--center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .rich-text__content--right {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .rich-text__heading {
+    font-size: var(--h2);
+    margin-bottom: var(--space-lg);
+  }
+
+  .rich-text__body {
+    font-size: var(--font-size-md);
+    color: var(--color-text);
+    line-height: 1.75;
+  }
+
+  .rich-text__body p {
+    margin-bottom: var(--space-md);
+  }
+
+  .rich-text__body p:last-child {
+    margin-bottom: 0;
+  }
+{%- endstyle -%}
+
+{%- assign alignment = section.settings.text_alignment | default: 'center' -%}
+
+<section class="rich-text" id="rich-text-{{ section.id }}">
+  <div class="container">
+    <div class="rich-text__content rich-text__content--{{ alignment }}">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="rich-text__heading glow">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.body != blank -%}
+        <div class="rich-text__body">
+          {{ section.settings.body }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "About Us"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>Share information about your brand, store, or products. Use this section to welcome customers and provide context for your collection.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text"
+    }
+  ]
+}
+{% endschema %}

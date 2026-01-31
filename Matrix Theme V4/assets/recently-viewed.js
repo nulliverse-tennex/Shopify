@@ -1,0 +1,16 @@
+class RecentlyViewed extends HTMLElement{constructor(){super();this.storageKey='matrix-recently-viewed';this.maxItems=20;this.maxDisplay=6;this.currentProductId=this.dataset.currentProduct;this.grid=this.querySelector('[data-recently-viewed-grid]');}
+connectedCallback(){if(this.currentProductId&&window.location.pathname.includes('/products/')){this.saveProduct();}
+this.loadProducts();}
+saveProduct(){const handle=window.location.pathname.split('/products/')[1]?.split('?')[0];if(!handle)return;let items=this.getStoredItems();items=items.filter(i=>i.handle!==handle);items.unshift({handle:handle,timestamp:Date.now()});if(items.length>this.maxItems)items=items.slice(0,this.maxItems);try{localStorage.setItem(this.storageKey,JSON.stringify(items));}catch(e){console.error('Failed to save recently viewed:',e);}}
+getStoredItems(){try{const data=localStorage.getItem(this.storageKey);return data?JSON.parse(data):[];}catch(e){return[];}}
+async loadProducts(){let items=this.getStoredItems();if(this.currentProductId){const currentHandle=window.location.pathname.split('/products/')[1]?.split('?')[0];items=items.filter(i=>i.handle!==currentHandle);}
+items=items.slice(0,this.maxDisplay);if(items.length===0){this.style.display='none';return;}
+const products=await Promise.all(items.map(item=>this.fetchProduct(item.handle)));const validProducts=products.filter(p=>p);if(validProducts.length===0){this.style.display='none';return;}
+this.renderProducts(validProducts);}
+async fetchProduct(handle){try{const response=await fetch(`/products/${handle}.js`);if(!response.ok)return null;return await response.json();}catch(e){return null;}}
+renderProducts(products){this.grid.innerHTML=products.map(p=>this.createCard(p)).join('');}
+createCard(product){const price=this.formatMoney(product.price);const comparePrice=product.compare_at_price>product.price?this.formatMoney(product.compare_at_price):'';const image=product.featured_image||'';const available=product.available;let badge='';if(comparePrice){badge='<span class="product-card__badge"><span class="badge badge--sale">Sale</span></span>';}else if(!available){badge='<span class="product-card__badge"><span class="badge badge--sold-out">Sold out</span></span>';}
+return`<div class="product-card"><a href="/products/${product.handle}" class="product-card__image" aria-label="${this.escapeHtml(product.title)}">${image?`<img src="${image}" alt="${this.escapeHtml(product.title)}" width="600" height="600" loading="lazy">`:'<div class="product-card__placeholder"></div>'}${badge}</a><div class="product-card__body"><h3 class="product-card__title"><a href="/products/${product.handle}">${this.escapeHtml(product.title)}</a></h3><div class="product-card__price">${comparePrice?`<span class="product-card__price--compare">${comparePrice}</span><span class="product-card__price--sale">${price}</span>`:price}</div></div></div>`;}
+formatMoney(cents){const amount=(cents/100).toFixed(2);return window.Shopify?.moneyFormat?window.Shopify.moneyFormat.replace('{{amount}}',amount).replace('{{amount_no_decimals}}',Math.floor(cents/100)):`$${amount}`;}
+escapeHtml(text){const div=document.createElement('div');div.textContent=text;return div.innerHTML;}}
+customElements.define('recently-viewed',RecentlyViewed);

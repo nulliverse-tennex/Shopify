@@ -1,0 +1,24 @@
+{%- if settings.enable_recently_viewed -%}
+<recently-viewed data-current-product="{{ product.id | default: '' }}" data-section-id="{{ section.id }}">
+  <div class="container pt-2xl pb-2xl">
+    <h2 class="glow mb-lg">> {{ section.settings.title | default: 'RECENTLY_VIEWED' }}_</h2>
+    <div id="recently-viewed-grid" class="grid grid--4" data-recently-viewed-grid></div>
+  </div>
+</recently-viewed>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "tag": "section",
+  "class": "recently-viewed-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "RECENTLY_VIEWED"
+    }
+  ]
+}
+{% endschema %}

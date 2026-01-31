@@ -1,0 +1,76 @@
+<button
+  type="button"
+  class="back-to-top"
+  aria-label="{{ 'navigation.scroll_to_top' | t }}"
+  data-back-to-top
+  hidden
+>
+  > TOP ↑
+</button>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    z-index: var(--z-back-to-top);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    background: var(--color-bg);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-fast), visibility var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .back-to-top:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top:hover {
+    box-shadow: var(--shadow-glow-sm);
+    background: var(--color-accent-dim);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var btn = document.querySelector('[data-back-to-top]');
+    if (!btn) return;
+
+    var threshold = 300;
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function checkScroll() {
+      if (window.pageYOffset > threshold) {
+        btn.hidden = false;
+      } else {
+        btn.hidden = true;
+      }
+    }
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+
+    btn.addEventListener('click', function() {
+      if (prefersReducedMotion) {
+        window.scrollTo(0, 0);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  })();
+</script>

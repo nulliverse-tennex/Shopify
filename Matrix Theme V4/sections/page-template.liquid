@@ -1,0 +1,119 @@
+{%- comment -%}
+  Page Template Section
+  Generic page for About, custom pages, etc.
+  Renders page title + page content
+{%- endcomment -%}
+
+<div class="container container--narrow">
+  <div class="page-content pt-2xl pb-3xl">
+
+    {%- if section.settings.show_title -%}
+      <header class="page-content__header mb-xl">
+        <h1 class="glow">{{ page.title }}</h1>
+      </header>
+    {%- endif -%}
+
+    <div class="page-content__body rte">
+      {{ page.content }}
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .page-content__header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .page-content__body {
+    line-height: 1.75;
+    font-size: var(--font-size-md);
+  }
+
+  .page-content__body h2,
+  .page-content__body h3,
+  .page-content__body h4 {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-content__body p {
+    margin-bottom: var(--space-md);
+  }
+
+  .page-content__body ul,
+  .page-content__body ol {
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-md);
+    list-style: disc;
+  }
+
+  .page-content__body ol {
+    list-style: decimal;
+  }
+
+  .page-content__body li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .page-content__body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .page-content__body a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .page-content__body img {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin: var(--space-lg) 0;
+  }
+
+  .page-content__body blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-md);
+    margin: var(--space-lg) 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .page-content__body table {
+    width: 100%;
+    margin: var(--space-lg) 0;
+    border: 1px solid var(--color-border);
+  }
+
+  .page-content__body th,
+  .page-content__body td {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    text-align: left;
+  }
+
+  .page-content__body th {
+    background: var(--color-panel);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page template",
+  "tag": "section",
+  "class": "page-template-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show page title",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

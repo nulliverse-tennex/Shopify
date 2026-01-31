@@ -1,0 +1,120 @@
+<div class="customer-login" data-template="login">
+  <div class="container container--narrow pt-3xl pb-3xl">
+    <div class="customer-form-panel">
+      <div class="customer-form-header text-center mb-xl">
+        <h1 class="glow">{{ 'customer.login.title' | t }}</h1>
+        <p class="customer-form-subtext mt-sm">> access_terminal_</p>
+      </div>
+
+      {%- form 'customer_login' -%}
+        {{ form.errors | default_errors }}
+
+        <div class="form-group">
+          <label class="form-label" for="customer-email">{{ 'customer.login.email' | t }}</label>
+          <input
+            type="email"
+            id="customer-email"
+            class="form-input"
+            name="customer[email]"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="user@domain.com"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="customer-password">{{ 'customer.login.password' | t }}</label>
+          <input
+            type="password"
+            id="customer-password"
+            class="form-input"
+            name="customer[password]"
+            autocomplete="current-password"
+            placeholder="••••••••"
+            required
+          >
+        </div>
+
+        <div class="customer-form-actions mt-lg">
+          <button type="submit" class="btn btn--primary btn--block">
+            {{ 'customer.login.submit' | t }}
+          </button>
+          <a href="{{ routes.account_recover_url }}" class="customer-form-link mt-md">
+            {{ 'customer.login.forgot_password' | t }}
+          </a>
+        </div>
+      {%- endform -%}
+
+      <div class="customer-form-footer mt-xl text-center">
+        <p class="customer-form-alt">
+          {{ 'customer.login.no_account' | t }}
+          <a href="{{ routes.account_register_url }}">{{ 'customer.login.create_account' | t }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .customer-form-panel {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-2xl);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .customer-form-header h1 {
+    font-size: var(--h2);
+  }
+
+  .customer-form-subtext {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .customer-form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .customer-form-link {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: text-shadow var(--transition-fast);
+    display: inline-block;
+  }
+
+  .customer-form-link:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+
+  .customer-form-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-lg);
+  }
+
+  .customer-form-alt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .customer-form-alt a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .customer-form-alt a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+    text-decoration: underline;
+  }
+</style>

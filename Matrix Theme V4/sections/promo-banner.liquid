@@ -1,0 +1,133 @@
+{%- if settings.enable_promo_banner and section.settings.text != blank -%}
+<div class="promo-banner" data-promo-banner data-banner-id="{{ section.id }}">
+  <div class="promo-banner__inner container flex flex--between flex--align-center">
+    <div class="promo-banner__content">
+      <span class="promo-banner__text">> {{ section.settings.text }}_</span>
+      {%- if section.settings.link != blank and section.settings.link_text != blank -%}
+        <a href="{{ section.settings.link }}" class="promo-banner__link">{{ section.settings.link_text }}</a>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.show_close_button -%}
+      <button type="button" class="promo-banner__close" aria-label="Close banner" data-banner-close>✕</button>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .promo-banner {
+    {% if section.settings.color_scheme == 'dark' %}
+      background: var(--color-bg);
+      color: var(--color-accent);
+      border-bottom: 1px solid var(--color-accent);
+    {% else %}
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-bottom: 1px solid var(--color-accent);
+    {% endif %}
+    padding: var(--space-sm) 0;
+    text-align: center;
+  }
+  
+  .promo-banner__inner {
+    min-height: 40px;
+  }
+  
+  .promo-banner__text {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    {% if section.settings.color_scheme == 'dark' %}
+      text-shadow: 0 0 5px var(--color-accent-glow);
+    {% endif %}
+  }
+  
+  .promo-banner__link {
+    margin-left: var(--space-md);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  .promo-banner__close {
+    background: none;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: var(--space-xs) var(--space-sm);
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: opacity var(--transition-fast);
+  }
+  
+  .promo-banner__close:hover {
+    opacity: 0.7;
+  }
+  
+  .promo-banner[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  (function() {
+    var banner = document.querySelector('[data-promo-banner]');
+    if (!banner) return;
+    
+    var bannerId = banner.dataset.bannerId;
+    var storageKey = 'matrix-promo-banner-' + bannerId;
+    
+    if (localStorage.getItem(storageKey) === 'dismissed') {
+      banner.hidden = true;
+      return;
+    }
+    
+    var closeBtn = banner.querySelector('[data-banner-close]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        banner.hidden = true;
+        localStorage.setItem(storageKey, 'dismissed');
+      });
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "class": "section-promo-banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Banner text",
+      "default": "FREE SHIPPING ON ORDERS OVER $50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link URL"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close_button",
+      "label": "Show close button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "dark", "label": "Dark (green on black)" },
+        { "value": "light", "label": "Light (black on green)" }
+      ],
+      "default": "light"
+    }
+  ]
+}
+{% endschema %}

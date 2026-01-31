@@ -1,0 +1,212 @@
+{%- comment -%}
+  Quick View Modal — Matrix Terminal aesthetic
+  Displays product details in overlay via Section Rendering API
+  Loaded conditionally when settings.enable_quick_buy is true
+{%- endcomment -%}
+
+<quick-view-modal class="quick-view" hidden>
+  <div class="quick-view__overlay" data-quick-view-close></div>
+  <div class="quick-view__panel" role="dialog" aria-modal="true" aria-label="Product quick view">
+    <button type="button" class="quick-view__close" data-quick-view-close aria-label="Close quick view">
+      <span aria-hidden="true">[ X ]</span>
+    </button>
+    <div class="quick-view__content" data-quick-view-content>
+      <div class="quick-view__loader" data-quick-view-loader>
+        <span class="quick-view__loader-text">LOADING_</span>
+      </div>
+    </div>
+    <a href="#" class="quick-view__full-link" data-quick-view-full-link>
+      [ VIEW FULL DETAILS ]
+    </a>
+  </div>
+</quick-view-modal>
+
+<style>
+  .quick-view {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-quick-view, 800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+  }
+
+  .quick-view[hidden] {
+    display: none;
+  }
+
+  /* Overlay */
+  .quick-view__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(2px);
+    animation: qv-fade-in 0.2s ease-out both;
+    cursor: pointer;
+  }
+
+  /* Panel */
+  .quick-view__panel {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--color-bg, #0a0a0a);
+    border: 1px solid var(--color-accent, #00ff41);
+    border-radius: var(--radius, 2px);
+    box-shadow:
+      0 0 30px rgba(0, 255, 65, 0.08),
+      0 0 60px rgba(0, 0, 0, 0.6);
+    animation: qv-slide-up 0.25s ease-out both;
+    animation-delay: 0.05s;
+  }
+
+  /* Close button */
+  .quick-view__close {
+    position: absolute;
+    top: var(--space-sm, 8px);
+    right: var(--space-sm, 8px);
+    z-index: 2;
+    padding: var(--space-xs, 4px) var(--space-sm, 8px);
+    font-family: var(--font-heading, 'VT323', monospace);
+    font-size: var(--font-size-md, 1rem);
+    color: var(--color-accent, #00ff41);
+    background: var(--color-bg, #0a0a0a);
+    border: 1px solid var(--color-border, #1a3a1a);
+    border-radius: var(--radius, 2px);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    line-height: 1;
+  }
+
+  .quick-view__close:hover,
+  .quick-view__close:focus-visible {
+    background: var(--color-accent-dim, rgba(0, 255, 65, 0.1));
+    border-color: var(--color-accent, #00ff41);
+  }
+
+  .quick-view__close:focus-visible {
+    outline: 2px solid var(--color-accent, #00ff41);
+    outline-offset: 2px;
+  }
+
+  /* Content area */
+  .quick-view__content {
+    padding: var(--space-xl, 24px);
+    min-height: 200px;
+  }
+
+  /* Loader */
+  .quick-view__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+
+  .quick-view__loader-text {
+    font-family: var(--font-heading, 'VT323', monospace);
+    font-size: var(--font-size-lg, 1.25rem);
+    color: var(--color-accent, #00ff41);
+    animation: qv-blink 0.6s step-end infinite;
+  }
+
+  /* Full details link */
+  .quick-view__full-link {
+    display: block;
+    padding: var(--space-md, 16px) var(--space-xl, 24px);
+    font-family: var(--font-heading, 'VT323', monospace);
+    font-size: var(--font-size-md, 1rem);
+    color: var(--color-accent, #00ff41);
+    text-align: center;
+    text-decoration: none;
+    border-top: 1px solid var(--color-border, #1a3a1a);
+    transition: background 0.15s;
+    letter-spacing: 0.08em;
+  }
+
+  .quick-view__full-link:hover,
+  .quick-view__full-link:focus-visible {
+    background: var(--color-accent-dim, rgba(0, 255, 65, 0.1));
+  }
+
+  .quick-view__full-link:focus-visible {
+    outline: 2px solid var(--color-accent, #00ff41);
+    outline-offset: -2px;
+  }
+
+  /* Product content overrides inside modal */
+  .quick-view__content .product-section {
+    padding: 0;
+  }
+
+  .quick-view__content .container {
+    padding: 0;
+    max-width: none;
+  }
+
+  .quick-view__content .product-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg, 20px);
+  }
+
+  .quick-view__content .product-gallery {
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  .quick-view__content .product-gallery__item:not(:first-child) {
+    display: none;
+  }
+
+  .quick-view__content .product-info__description {
+    display: none;
+  }
+
+  /* Animations */
+  @keyframes qv-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes qv-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes qv-blink {
+    50% { opacity: 0; }
+  }
+
+  /* Scrollbar styling inside panel */
+  .quick-view__panel::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .quick-view__panel::-webkit-scrollbar-track {
+    background: var(--color-bg, #0a0a0a);
+  }
+
+  .quick-view__panel::-webkit-scrollbar-thumb {
+    background: var(--color-border, #1a3a1a);
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    .quick-view__content .product-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .quick-view__content .product-gallery {
+      max-height: 400px;
+    }
+  }
+</style>

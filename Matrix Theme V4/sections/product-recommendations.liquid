@@ -1,0 +1,48 @@
+{%- if settings.enable_recommended_products -%}
+<product-recommendations data-product-id="{{ product.id }}" data-section-id="{{ section.id }}" data-limit="{{ section.settings.max_products }}">
+  <div class="container pt-2xl pb-2xl">
+    <h2 class="glow mb-lg">> {{ section.settings.title | default: 'RECOMMENDED_PRODUCTS' }}_</h2>
+    <div class="grid grid--{{ section.settings.grid_columns }}" data-recommendations-grid>
+      {%- comment -%} Populated by JS via Section Rendering API {%- endcomment -%}
+    </div>
+  </div>
+</product-recommendations>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "class": "product-recommendations-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "RECOMMENDED_PRODUCTS"
+    },
+    {
+      "type": "select",
+      "id": "max_products",
+      "label": "Max products",
+      "options": [
+        { "value": "4", "label": "4" },
+        { "value": "6", "label": "6" },
+        { "value": "8", "label": "8" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "grid_columns",
+      "label": "Grid columns",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

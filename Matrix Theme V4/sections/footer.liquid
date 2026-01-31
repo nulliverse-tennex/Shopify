@@ -1,0 +1,133 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner container">
+    <div class="site-footer__grid">
+
+      <div class="site-footer__nav">
+        {%- assign footer_menu = linklists[section.settings.menu] -%}
+        {%- if footer_menu != blank -%}
+          <nav aria-label="Footer navigation">
+            <ul class="site-footer__links">
+              {%- for link in footer_menu.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="site-footer__link">
+                    {{ link.title }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      </div>
+
+      <div class="site-footer__info">
+        <p class="site-footer__copyright">
+          &copy; {{ 'now' | date: '%Y' }} {{ section.settings.copyright_text | default: shop.name }}
+        </p>
+        <div class="site-footer__ascii" aria-hidden="true">
+          <span class="site-footer__terminal">&gt; SYSTEM ONLINE_</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-3xl);
+  }
+
+  .site-footer__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-lg);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    list-style: none;
+  }
+
+  .site-footer__link {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+  }
+
+  .site-footer__link:hover {
+    color: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .site-footer__info {
+    text-align: right;
+  }
+
+  .site-footer__copyright {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__terminal {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    opacity: 0.5;
+    margin-top: var(--space-xs);
+    letter-spacing: 0.1em;
+    animation: terminal-blink 1.2s step-end infinite;
+  }
+
+  @keyframes terminal-blink {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.15; }
+  }
+
+  @media (max-width: 767px) {
+    .site-footer__grid {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .site-footer__info {
+      text-align: center;
+    }
+
+    .site-footer__links {
+      justify-content: center;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Footer menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "info": "Defaults to shop name if empty"
+    }
+  ]
+}
+{% endschema %}

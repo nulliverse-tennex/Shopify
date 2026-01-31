@@ -1,0 +1,73 @@
+{% comment %}
+  Cart Drawer Item — Compact line item for cart drawer
+  Accepts: item (cart line item object)
+  Usage: {% render 'cart-drawer-item', item: item %}
+{% endcomment %}
+
+<div class="drawer-item" data-line-key="{{ item.key }}">
+  <div class="drawer-item__image">
+    {% if item.image %}
+      <a href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+        <img
+          src="{{ item.image | image_url: width: 128 }}"
+          alt="{{ item.image.alt | escape }}"
+          width="64"
+          height="64"
+          loading="lazy"
+        >
+      </a>
+    {% else %}
+      <div class="drawer-item__no-image">
+        <span>NO_IMG</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="drawer-item__info">
+    <a href="{{ item.url }}" class="drawer-item__title">{{ item.product.title }}</a>
+    {% unless item.product.has_only_default_variant %}
+      <span class="drawer-item__variant">{{ item.variant.title }}</span>
+    {% endunless %}
+    <span class="drawer-item__price">{{ item.original_price | money }}</span>
+  </div>
+
+  <div class="drawer-item__actions">
+    <div class="drawer-item__qty">
+      <button
+        type="button"
+        class="drawer-item__qty-btn"
+        data-quantity-minus
+        data-line-key="{{ item.key }}"
+        aria-label="Decrease quantity for {{ item.title | escape }}"
+      >&#8722;</button>
+      <input
+        type="number"
+        class="drawer-item__qty-input"
+        value="{{ item.quantity }}"
+        min="0"
+        max="99"
+        data-quantity-input
+        data-line-key="{{ item.key }}"
+        aria-label="Quantity for {{ item.title | escape }}"
+      >
+      <button
+        type="button"
+        class="drawer-item__qty-btn"
+        data-quantity-plus
+        data-line-key="{{ item.key }}"
+        aria-label="Increase quantity for {{ item.title | escape }}"
+      >+</button>
+    </div>
+
+    <div class="drawer-item__row">
+      <span class="drawer-item__line-total" data-cart-item-total>{{ item.final_line_price | money }}</span>
+      <button
+        type="button"
+        class="drawer-item__remove"
+        data-remove-item
+        data-line-key="{{ item.key }}"
+        aria-label="Remove {{ item.title | escape }} from cart"
+      >[DEL]</button>
+    </div>
+  </div>
+</div>

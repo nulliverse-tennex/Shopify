@@ -1,0 +1,119 @@
+{% comment %}
+  Collection Template Section
+  Renders collection title with glow + product grid + terminal pagination
+{% endcomment %}
+
+<div class="container">
+  <header class="collection-header mb-xl">
+    <h1 class="glow--strong">{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection-header__description mt-md">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+  </header>
+
+  {% paginate collection.products by section.settings.products_per_page %}
+
+    {% if settings.enable_collection_filtering %}
+      {% render 'collection-filters' %}
+    {% endif %}
+
+    {% if collection.products.size > 0 %}
+      <div class="collection-sorting mb-md">
+        <label for="sort-by">Sort:</label>
+        <select id="sort-by" name="sort_by" onchange="window.location.href='?sort_by=' + this.value">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+              {{ option.name }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+
+      <div class="grid grid--{{ section.settings.grid_columns }}" data-collection-grid>
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
+
+      <div data-pagination>
+        {% render 'pagination', paginate: paginate %}
+      </div>
+    {% else %}
+      <div class="collection-empty text-center pt-3xl pb-3xl">
+        <p class="collection-empty__icon" aria-hidden="true">[&nbsp;]</p>
+        <p class="collection-empty__message mt-md">NO PRODUCTS FOUND_</p>
+        <p class="collection-empty__hint mt-sm">This collection is empty.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn mt-lg">BROWSE ALL</a>
+      </div>
+    {% endif %}
+
+  {% endpaginate %}
+</div>
+
+<style>
+  .collection-header {
+    padding-top: var(--space-2xl);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .collection-header__description {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    max-width: 640px;
+  }
+
+  .collection-empty__icon {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    color: var(--color-accent);
+    text-shadow: 0 0 8px var(--color-accent-glow);
+    line-height: 1;
+  }
+
+  .collection-empty__message {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .collection-empty__hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Template",
+  "tag": "section",
+  "class": "collection-template",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 12,
+      "max": 36,
+      "step": 12,
+      "default": 12,
+      "label": "Products per page"
+    },
+    {
+      "type": "select",
+      "id": "grid_columns",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "3",
+      "label": "Grid columns"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,113 @@
+<div class="promo-popup__overlay" data-promo-popup-overlay hidden></div>
+
+<div class="promo-popup" data-promo-popup hidden>
+  <div class="promo-popup__panel">
+    <button type="button" class="promo-popup__close" data-promo-popup-close aria-label="{{ 'promo.popup_close' | t }}">
+      [X]
+    </button>
+
+    <h2 class="promo-popup__heading glow">{{ settings.popup_heading | default: '> TERMINAL_ACCESS_' }}</h2>
+    <div class="promo-popup__text">{{ settings.popup_text | default: 'Subscribe for exclusive updates.' }}</div>
+
+    {% if settings.popup_type == 'email' %}
+      {% form 'customer', class: 'promo-popup__form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input
+          type="email"
+          name="contact[email]"
+          placeholder="{{ 'promo.email_placeholder' | t }}"
+          class="form-input"
+          required
+          aria-label="Email address"
+        >
+        <button type="submit" class="btn btn--primary btn--block">
+          {{ settings.popup_button_text | default: 'SUBSCRIBE' }}
+        </button>
+      {% endform %}
+    {% else %}
+      <button type="button" class="btn btn--primary btn--block" data-promo-popup-close>
+        {{ settings.popup_button_text | default: 'GOT IT' }}
+      </button>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .promo-popup__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: var(--z-popup);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .promo-popup__overlay:not([hidden]) {
+    opacity: 1;
+  }
+
+  .promo-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: calc(var(--z-popup) + 1);
+    max-width: 500px;
+    width: 90%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+  }
+
+  .promo-popup:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .promo-popup__panel {
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-glow-lg), 0 10px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+  }
+
+  .promo-popup__close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    color: var(--color-accent);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-xs) var(--space-sm);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .promo-popup__close:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-dim);
+  }
+
+  .promo-popup__heading {
+    font-size: var(--h3);
+    margin-bottom: var(--space-md);
+    text-align: center;
+  }
+
+  .promo-popup__text {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-muted);
+  }
+
+  .promo-popup__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+</style>

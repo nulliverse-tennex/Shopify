@@ -1,0 +1,191 @@
+{%- comment -%}
+  Article Template Section
+  Renders article title (VT323 glow), author, date, featured image, body richtext, back link
+{%- endcomment -%}
+
+<div class="container container--narrow">
+  <article class="article pt-2xl pb-3xl">
+
+    <header class="article__header mb-xl">
+      <h1 class="article__title glow">{{ article.title }}</h1>
+
+      <div class="article__meta mt-md">
+        {%- if section.settings.show_author and article.author != blank -%}
+          <span class="article__author">{{ article.author }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.show_date -%}
+          {%- if section.settings.show_author and article.author != blank -%}
+            <span class="article__meta-sep" aria-hidden="true">//</span>
+          {%- endif -%}
+          <time class="article__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+            {{ article.published_at | date: '%b %d, %Y' }}
+          </time>
+        {%- endif -%}
+      </div>
+    </header>
+
+    {%- if article.image -%}
+      <div class="article__featured-image mb-xl">
+        <img
+          src="{{ article.image | image_url: width: 1200 }}"
+          alt="{{ article.image.alt | default: article.title | escape }}"
+          width="{{ article.image.width }}"
+          height="{{ article.image.height }}"
+          loading="eager"
+        >
+      </div>
+    {%- endif -%}
+
+    <div class="article__body rte">
+      {{ article.content }}
+    </div>
+
+    <footer class="article__footer mt-2xl pt-xl">
+      <a href="{{ blog.url }}" class="article__back-link">
+        &lt; BACK TO {{ blog.title | upcase }}_
+      </a>
+    </footer>
+
+  </article>
+</div>
+
+<style>
+  .article__header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-lg);
+  }
+
+  .article__title {
+    font-family: var(--font-heading);
+    font-size: var(--h1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .article__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .article__meta-sep {
+    color: var(--color-accent);
+    font-size: var(--font-size-xs);
+  }
+
+  .article__featured-image {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--color-panel);
+  }
+
+  .article__featured-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Richtext body styles */
+  .article__body {
+    line-height: 1.75;
+    font-size: var(--font-size-md);
+  }
+
+  .article__body h2,
+  .article__body h3,
+  .article__body h4 {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .article__body p {
+    margin-bottom: var(--space-md);
+  }
+
+  .article__body ul,
+  .article__body ol {
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-md);
+    list-style: disc;
+  }
+
+  .article__body ol {
+    list-style: decimal;
+  }
+
+  .article__body li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .article__body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .article__body a:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+
+  .article__body img {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin: var(--space-lg) 0;
+  }
+
+  .article__body blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-md);
+    margin: var(--space-lg) 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .article__footer {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .article__back-link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: text-shadow var(--transition-fast);
+  }
+
+  .article__back-link:hover {
+    text-shadow: 0 0 5px var(--color-accent-glow);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Article template",
+  "tag": "section",
+  "class": "article-template-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

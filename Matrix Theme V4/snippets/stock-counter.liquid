@@ -1,0 +1,51 @@
+{%- comment -%}
+  Stock Counter Snippet
+  Displays low-stock warning or out-of-stock message with Matrix terminal styling
+  
+  Usage: {% render 'stock-counter', variant: variant %}
+  
+  Parameters:
+  - variant: The product variant object
+{%- endcomment -%}
+
+{%- if settings.enable_stock_counter -%}
+  {%- if variant.inventory_management == 'shopify' -%}
+    {%- assign inventory_qty = variant.inventory_quantity -%}
+    {%- assign threshold = settings.stock_threshold -%}
+    
+    {%- if variant.available == false or inventory_qty <= 0 -%}
+      {%- comment -%} Out of stock {%- endcomment -%}
+      <div class="stock-counter stock-counter--out" data-stock-counter data-inventory-quantity="0" data-stock-threshold="{{ threshold }}">
+        > ERROR: OUT OF STOCK_
+      </div>
+    {%- elsif inventory_qty <= threshold -%}
+      {%- comment -%} Low stock warning {%- endcomment -%}
+      <div class="stock-counter stock-counter--low" data-stock-counter data-inventory-quantity="{{ inventory_qty }}" data-stock-threshold="{{ threshold }}">
+        > WARNING: Only {{ inventory_qty }} left in stock_
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+<style>
+  .stock-counter {
+    margin-top: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: none;
+  }
+
+  .stock-counter--low {
+    display: block;
+    color: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent-glow, rgba(0, 255, 65, 0.4));
+  }
+
+  .stock-counter--out {
+    display: block;
+    color: var(--color-error);
+    text-shadow: 0 0 5px rgba(255, 68, 68, 0.4);
+  }
+</style>
