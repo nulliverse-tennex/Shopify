@@ -106,6 +106,19 @@
     }
   }
 
+  // Theme editor support — registered BEFORE early return so they work regardless of canRun()
+  document.addEventListener('shopify:section:load', function() {
+    check();
+  });
+
+  document.addEventListener('shopify:section:unload', function() {
+    stop();
+    var c = document.getElementById('matrix-rain-canvas');
+    if (c) c.remove();
+    canvas = null;
+    ctx = null;
+  });
+
   if (!canRun()) return;
 
   createCanvas();

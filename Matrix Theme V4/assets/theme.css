@@ -798,6 +798,30 @@ body.scanlines-enabled::after {
 
 
 /* ------------------------------------------------------------
+   11c. EFFECTS — CRT FLICKER
+   ------------------------------------------------------------ */
+
+body.flicker-enabled {
+  animation: crt-flicker 8s ease-in-out infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  3% { opacity: 0.97; }
+  6% { opacity: 1; }
+  9% { opacity: 0.98; }
+  12% { opacity: 1; }
+  /* Remaining 88% = no flicker. ~2 dips per 8s = 0.25Hz. WCAG 2.3.1 requires < 3Hz. */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.flicker-enabled {
+    animation: none;
+  }
+}
+
+
+/* ------------------------------------------------------------
    12. ACCESSIBILITY
    ------------------------------------------------------------ */
 

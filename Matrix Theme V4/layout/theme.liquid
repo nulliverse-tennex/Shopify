@@ -69,7 +69,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="{% if settings.enable_matrix_rain %}rain-enabled {% endif %}{% if settings.enable_scanlines %}scanlines-enabled{% endif %}" data-popup-delay="{{ settings.popup_delay | default: 5 }}">
+  <body class="{% if settings.enable_matrix_rain %}rain-enabled {% endif %}{% if settings.enable_scanlines %}scanlines-enabled {% endif %}{% if settings.enable_flicker %}flicker-enabled {% endif %}" data-popup-delay="{{ settings.popup_delay | default: 5 }}">
     <a href="#main-content" class="skip-to-content visually-hidden">
       {{ 'accessibility.skip_to_content' | t }}
     </a>
@@ -93,7 +93,7 @@
     {% if settings.enable_recommended_products %}<script src="{{ 'product-recommendations.js' | asset_url }}" defer></script>{% endif %}
     {% if settings.enable_recently_viewed %}<script src="{{ 'recently-viewed.js' | asset_url }}" defer></script>{% endif %}
     {% if settings.enable_collection_filtering %}<script src="{{ 'collection-filters.js' | asset_url }}" defer></script>{% endif %}
-    <script src="{{ 'matrix-rain.js' | asset_url }}" defer></script>
+    {% if settings.enable_matrix_rain %}<script src="{{ 'matrix-rain.js' | asset_url }}" defer></script>{% endif %}
 
     {% if settings.enable_back_to_top %}{% render 'back-to-top' %}{% endif %}
     {% if settings.enable_promo_popup %}
