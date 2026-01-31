@@ -2,22 +2,12 @@
   "type": "header",
   "name": "Header group",
   "sections": {
-    "promo-banner": {
-      "type": "promo-banner",
-      "settings": {}
-    },
-    "countdown-banner": {
-      "type": "countdown-banner",
-      "settings": {}
-    },
     "header": {
       "type": "header",
       "settings": {}
     }
   },
   "order": [
-    "promo-banner",
-    "countdown-banner",
     "header"
   ]
 }
