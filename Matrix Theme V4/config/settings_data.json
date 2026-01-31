@@ -34,11 +34,7 @@
     "popup_delay": 5,
     "popup_heading": "",
     "popup_text": "",
-    "popup_button_text": "",
-    "enable_countdown": false,
-    "countdown_end_date": "",
-    "countdown_label": "",
-    "countdown_expired_message": ""
+    "popup_button_text": ""
   },
   "presets": {
     "Matrix Terminal V4": {
@@ -74,11 +70,7 @@
       "popup_delay": 5,
       "popup_heading": "",
       "popup_text": "",
-      "popup_button_text": "",
-      "enable_countdown": false,
-      "countdown_end_date": "",
-      "countdown_label": "",
-      "countdown_expired_message": ""
+      "popup_button_text": ""
     }
   }
 }

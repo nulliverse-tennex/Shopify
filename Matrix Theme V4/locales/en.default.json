@@ -235,13 +235,6 @@
     "subscribe": "Subscribe",
     "email_placeholder": "Enter your email"
   },
-  "countdown": {
-    "days": "Days",
-    "hours": "Hours",
-    "minutes": "Minutes",
-    "seconds": "Seconds",
-    "expired": "This promotion has ended"
-  },
   "navigation": {
     "back_to_top": "Back to top",
     "scroll_to_top": "Scroll to top"

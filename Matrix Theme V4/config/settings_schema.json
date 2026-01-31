@@ -347,56 +347,19 @@
         "type": "text",
         "id": "popup_heading",
         "label": "Popup heading",
-        "default": ""
+        "default": "Join the Matrix"
       },
       {
         "type": "textarea",
         "id": "popup_text",
         "label": "Popup text",
-        "default": ""
+        "default": "Subscribe to receive exclusive offers and updates."
       },
       {
         "type": "text",
         "id": "popup_button_text",
         "label": "Popup button text",
-        "default": ""
-      }
-    ]
-  },
-  {
-    "name": "Countdown Timer",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Countdown timer"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_countdown",
-        "label": "Enable countdown timer",
-        "default": false,
-        "info": "Show a countdown banner for promotions"
-      },
-      {
-        "type": "text",
-        "id": "countdown_end_date",
-        "label": "Countdown end date",
-        "default": "",
-        "info": "ISO 8601 format, e.g. 2026-03-01T00:00:00Z"
-      },
-      {
-        "type": "text",
-        "id": "countdown_label",
-        "label": "Countdown label",
-        "default": "",
-        "info": "Text to display before the countdown"
-      },
-      {
-        "type": "text",
-        "id": "countdown_expired_message",
-        "label": "Expired message",
-        "default": "",
-        "info": "Message shown when the countdown has ended"
+        "default": "Subscribe"
       }
     ]
   }
