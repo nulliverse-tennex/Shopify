@@ -1,6 +1,7 @@
-<div class="promo-popup__overlay" data-promo-popup-overlay hidden></div>
+<promo-popup>
+  <div class="promo-popup__overlay" data-promo-popup-overlay hidden></div>
 
-<div class="promo-popup" data-promo-popup hidden>
+  <div class="promo-popup" data-promo-popup hidden>
   <div class="promo-popup__panel">
     <button type="button" class="promo-popup__close" data-promo-popup-close aria-label="{{ 'promo.popup_close' | t }}">
       [X]
@@ -29,8 +30,9 @@
         {{ settings.popup_button_text | default: 'GOT IT' }}
       </button>
     {% endif %}
-  </div>
+   </div>
 </div>
+</promo-popup>
 
 <style>
   .promo-popup__overlay {

@@ -126,7 +126,10 @@
   running = true;
   animId = requestAnimationFrame(draw);
 
-  window.addEventListener('resize', check);
+   window.addEventListener('resize', function() {
+     if (canvas && running) resize();
+     check();
+   });
 
   window
     .matchMedia('(prefers-reduced-motion: reduce)')
