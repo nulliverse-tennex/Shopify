@@ -10,7 +10,6 @@
     'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン' +
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var FONT_SIZE = 16;
-  var MAX_COLS = 60;
   var TRAIL_ALPHA = 0.05;
 
   var canvas, ctx, columns, drops, animId, running;
@@ -36,15 +35,25 @@
     ctx = canvas.getContext('2d');
   }
 
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    columns = Math.min(Math.floor(canvas.width / FONT_SIZE), MAX_COLS);
-    drops = new Array(columns);
-    for (var i = 0; i < columns; i++) {
-      drops[i] = Math.random() * -100;
-    }
-  }
+   function resize() {
+     var dpr = window.devicePixelRatio || 1;
+     var width = window.innerWidth;
+     var height = window.innerHeight;
+     
+     canvas.width = width * dpr;
+     canvas.height = height * dpr;
+     canvas.style.width = width + 'px';
+     canvas.style.height = height + 'px';
+     
+     // Reset transform before scaling to prevent compounding
+     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+     
+     columns = Math.floor(width / FONT_SIZE);
+     drops = new Array(columns);
+     for (var i = 0; i < columns; i++) {
+       drops[i] = Math.random() * -100;
+     }
+   }
 
   function draw() {
     ctx.fillStyle = 'rgba(0, 0, 0, ' + TRAIL_ALPHA + ')';
