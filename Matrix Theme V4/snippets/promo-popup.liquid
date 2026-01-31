@@ -11,7 +11,7 @@
     <div class="promo-popup__text">{{ settings.popup_text | default: 'Subscribe for exclusive updates.' }}</div>
 
     {% if settings.popup_type == 'email' %}
-      {% form 'customer', class: 'promo-popup__form' %}
+      {% form 'contact', class: 'promo-popup__form' %}
         <input type="hidden" name="contact[tags]" value="newsletter">
         <input
           type="email"

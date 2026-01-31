@@ -111,25 +111,26 @@
     check();
   });
 
-  document.addEventListener('shopify:section:unload', function() {
-    stop();
-    var c = document.getElementById('matrix-rain-canvas');
-    if (c) c.remove();
-    canvas = null;
-    ctx = null;
-  });
+   document.addEventListener('shopify:section:unload', function() {
+     stop();
+     var c = document.getElementById('matrix-rain-canvas');
+     if (c) c.remove();
+     canvas = null;
+     ctx = null;
+   });
 
-  if (!canRun()) return;
-
-  createCanvas();
-  resize();
-  running = true;
-  animId = requestAnimationFrame(draw);
-
+   // Resize listener — registered BEFORE early return so it works regardless of canRun()
    window.addEventListener('resize', function() {
      if (canvas && running) resize();
      check();
    });
+
+   if (!canRun()) return;
+
+   createCanvas();
+   resize();
+   running = true;
+   animId = requestAnimationFrame(draw);
 
   window
     .matchMedia('(prefers-reduced-motion: reduce)')
