@@ -48,8 +48,9 @@
     "stock_low": "Only {{ count }} left in stock",
     "stock_in_stock": "In stock",
     "stock_out": "Out of stock",
-    "quick_buy": "Quick add",
-    "quick_view": "Quick view",
+     "quick_buy": "Quick add",
+     "quick_add": "Quick add",
+     "quick_view": "Quick view",
     "recommended_title": "You may also like",
     "recently_viewed_title": "Recently viewed"
   },

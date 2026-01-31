@@ -89,12 +89,16 @@
       border-style: dashed;
     }
 
-    .quick-buy__loading {
-      display: inline-flex;
-      align-items: center;
-    }
+     .quick-buy__loading {
+       display: inline-flex;
+       align-items: center;
+     }
 
-    .quick-buy__spinner {
+     .quick-buy__loading[hidden] {
+       display: none !important;
+     }
+
+     .quick-buy__spinner {
       display: inline-block;
       width: 12px;
       height: 12px;
