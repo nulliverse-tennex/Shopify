@@ -1,9 +1,9 @@
-{%- if settings.enable_countdown and settings.countdown_end_date != blank -%}
-<countdown-timer data-end-date="{{ settings.countdown_end_date }}" data-section-id="{{ section.id }}">
+{%- if section.settings.end_date != blank -%}
+<countdown-timer data-end-date="{{ section.settings.end_date }}" data-section-id="{{ section.id }}">
   <div class="countdown-banner">
     <div class="container">
       <div class="countdown-banner__inner">
-        <span class="countdown-banner__label">{{ settings.countdown_label | default: '> SALE ENDS IN:' }}</span>
+        <span class="countdown-banner__label">{{ section.settings.label | default: '> SALE ENDS IN:' }}</span>
         <div class="countdown-banner__timer" data-countdown-display>
           <span data-countdown-days>00</span>d
           <span data-countdown-hours>00</span>h
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="countdown-banner__expired" data-countdown-expired hidden>
-        {{ settings.countdown_expired_message | default: '> SALE ENDED_' }}
+        {{ section.settings.expired_message | default: '> SALE ENDED_' }}
       </div>
     </div>
   </div>
@@ -78,8 +78,30 @@
   "name": "Countdown banner",
   "tag": "section",
   "class": "countdown-banner-section",
-   "settings": [],
-   "disabled_on": { "groups": ["footer"] },
-   "presets": [{ "name": "Countdown banner", "category": "Banners" }]
+  "settings": [
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "Countdown end date",
+      "default": "",
+      "info": "ISO 8601 format, e.g. 2026-03-01T00:00:00Z"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Countdown label",
+      "default": "> SALE ENDS IN:",
+      "info": "Text to display before the countdown"
+    },
+    {
+      "type": "text",
+      "id": "expired_message",
+      "label": "Expired message",
+      "default": "> SALE ENDED_",
+      "info": "Message shown when the countdown has ended"
+    }
+  ],
+  "disabled_on": { "groups": ["footer"] },
+  "presets": [{ "name": "Countdown banner", "category": "Banners" }]
 }
 {% endschema %}
