@@ -1,0 +1,29 @@
+# Internal documentation and development files
+.sisyphus/
+
+# Development and build files
+*.log
+*.tmp
+*.cache
+node_modules/
+.env
+.env.local
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# Editor configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.editorconfig
+
+# Backup files
+*.bak
+*.backup
+*~
